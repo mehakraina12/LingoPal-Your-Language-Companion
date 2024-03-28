@@ -56,44 +56,48 @@
       <a href="{% url 'settings_attempt'%}"><i class="fas fa-gear"></i><span>Settings</span></a>
    </nav>
 </div>
-
+<div id="saveMessage" style="display: none; background-color: #ffcccc; color: red; padding: 10px; text-align: center; font-size: 20px;">Settings saved successfully!</div>
 <section class="form-container">
-   <form action="" method="post" enctype="multipart/form-data">
+   <form id="settingsForm" action="" method="post" enctype="multipart/form-data">
+
+      {%  csrf_token %}
 
       <div id="settings" class="settings-container">
          <h3 style="color: white;">Settings</h3>
       </div>
+
       <div class="setting-option">  
          <div class="container123456">
-            <input type="checkbox" id="check1">
-            <label for="check1" class="button"><i class="fas fa-bell fa-2x"></i></label>
+             <input type="checkbox" id="check1" name="notification" {% if notification %}checked{% endif %}>
+             <label for="check1" class="button"><i class="fas fa-bell fa-2x"></i></label>
          </div>
          <h2 class="notification-title">Notifications</h2>
-      </div>
-      
-      <div class="setting-option">
+     </div>
+     
+     <div class="setting-option">
          <div class="container123456">
-            <input type="checkbox" id="check2">
-            <label for="check2" class="button"><i class="fas fa-envelope fa-2x"></i></label>
+             <input type="checkbox" id="check2" name="email_notification" {% if email_notification %}checked{% endif %}>
+             <label for="check2" class="button"><i class="fas fa-envelope fa-2x"></i></label>
          </div>
          <h2 class="notification-title">Email Notifications</h2>
-      </div>
-
-      <div class="setting-option">
+     </div>
+     
+     <div class="setting-option">
          <div class="container123456">
-            <input type="checkbox" id="check3">
-            <label for="check3" class="button"><i class="fas fa-comments fa-2x"></i></label>
+             <input type="checkbox" id="check3" name="chat_notification" {% if chat_notification %}checked{% endif %}>
+             <label for="check3" class="button"><i class="fas fa-comments fa-2x"></i></label>
          </div>
          <h2 class="notification-title">Chat Notifications</h2>
-      </div>
-
-      <div class="setting-option">
+     </div>
+     
+     <div class="setting-option">
          <div class="container123456">
-            <input type="checkbox" id="check4">
-            <label for="check4" class="button"><i class="fas fa-video fa-2x"></i></label>
+             <input type="checkbox" id="check4" name="video_call_notification" {% if video_call_notification %}checked{% endif %}>
+             <label for="check4" class="button"><i class="fas fa-video fa-2x"></i></label>
          </div>
          <h2 class="notification-title">Missed Video Call Notifications</h2>
-      </div>
+     </div>
+     
 
       <div class="button-container">
          <input type="submit" value="Save" name="submit" class="btn">
@@ -112,10 +116,32 @@
 <script src="static/js/script1.js"></script>
 
 <script>
-   // JavaScript code to handle cancel button click
-   document.querySelector('.cancel-btn').addEventListener('click', function() {
-       history.back();
+   document.getElementById('settingsForm').addEventListener('submit', function(event) {
+       event.preventDefault();  // Prevent default form submission
+
+       // Submit the form data using AJAX
+       var formData = new FormData(this);
+       var xhr = new XMLHttpRequest();
+       xhr.open('POST', this.action);
+       xhr.onreadystatechange = function() {
+           if (xhr.readyState === XMLHttpRequest.DONE) {
+               if (xhr.status === 200) {
+                   // Display the save message and update switch buttons
+                   document.getElementById('saveMessage').style.display = 'block';
+                   // You can update switch buttons here
+               } else {
+                   // Handle errors if any
+                   console.error('Error saving settings:', xhr.responseText);
+               }
+           }
+       };
+       xhr.send(formData);
    });
+
+   document.querySelector('.cancel-btn').addEventListener('click', function() {
+      history.back();
+  });
 </script>
+
 </body>
 </html>

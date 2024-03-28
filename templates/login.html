@@ -55,7 +55,16 @@
 <section class="form-container">
 
    <form action="" method="post" enctype="multipart/form-data">
-      {% csrf_token %}
+      {%  csrf_token %}
+      
+      {% if messages %}
+         <ul class="messages">
+            {% for message in messages %}
+               <li style="color: red; font-size: 15px;" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+         </ul>
+      {% endif %}
+
       <div id="settings" class="settings-container">
          <h3 style="color: white;">Login</h3>
       </div>

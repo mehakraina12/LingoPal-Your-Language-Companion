@@ -90,25 +90,35 @@
    
          <div class="box">
             <div class="flex">
-               <i class="fas fa-home"></i>
+               <i class="fas fa-book-reader"></i>
                <div>
-                  <span>Native Language</span>
-                  <p>Proficiency</p>
+                  <span>Enrolled Language</span>
+                  <p>{{language_to_learn}}</p>
                </div>
             </div>
-            
          </div>
+         
    
+      </div>
+      
+      <a href="{% url 'home_attempt' %}" class="btn">
+      <div class="box-container">
          <div class="box">
             <div class="flex">
                <i class="fas fa-book-reader"></i>
                <div>
-                  <span>Enrolled Courses</span>
-                  <p>languages</p>
+                  <span>Select the languages you want to teach</span>
+                  
                </div>
-   
+            </div>
+            
+         </div>
       </div>
+      </a>
+
+      
    </div>
+
 
 </section>
 

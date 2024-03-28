@@ -14,8 +14,35 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login
 import requests
-
 import base64
+
+language_mapping = {
+    1: "Arabic",
+    2: "Bengali",
+    3: "Chinese (Mandarin)",
+    4: "Dutch",
+    5: "English",
+    6: "French",
+    7: "German",
+    8: "Greek",
+    9: "Gujarati",
+    10: "Hindi",
+    11: "Italian",
+    12: "Japanese",
+    13: "Kashmiri",
+    14: "Korean",
+    15: "Odia",
+    16: "Punjabi",
+    17: "Portuguese",
+    18: "Russian",
+    19: "Spanish",
+    20: "Telugu",
+    21: "Thai",
+    22: "Urdu",
+    23: "Vietnamese",
+    24: "Swahili",
+    25: "Swedish"
+}
 
 def upload_to_imgbb(image_file):
     url = "https://api.imgbb.com/1/upload"
@@ -28,15 +55,9 @@ def upload_to_imgbb(image_file):
     print(response.content)  # Print response content for debugging
     return response.json()["data"]["url"]
 
-
-
-
-
-# from .models import UserProfile, Language
 client = pymongo.MongoClient("mongodb+srv://lingopal:dOyEzWnB8ypRPeQP@lingopal.hymmldz.mongodb.net/lingopal_YLC")
 
 db = client['lingopal_YLC']
-# collection = db['mycollection']
 
 @csrf_exempt
 def VerifyOTP(request):
@@ -78,7 +99,6 @@ def register_attempt(request):
                 messages.error(request, 'Failed to upload profile picture.')
                 return redirect('register_attempt')
 
-        native_languages = request.POST.getlist('native_languages')
         language_to_learn = request.POST.get('language_to_learn')
         about_me = request.POST.get('about_me')
 
@@ -87,8 +107,6 @@ def register_attempt(request):
             'name': name,
             'email': email,
             'username': username,
-            'password': hashed_password,
-            'native_languages': native_languages,
             'language_to_learn': language_to_learn,
             'about_me': about_me,
             'profile_pic_path': imgbb_url,
@@ -113,7 +131,6 @@ def login_attempt(request):
         if reply:
             if check_password(password, reply['password']):
                 request.session['username'] = reply['username']
-                messages.success(request, "You have been logged in successfully!")
                 return redirect('home_attempt')  # Redirect to home page after successful login
             else:
                 messages.error(request, "Check your password")
@@ -128,8 +145,6 @@ def logout_attempt(request):
         del request.session['user_id']
     if 'username' in request.session:
         del request.session['username']
-
-    messages.info(request, "You have been logged out.")
     return redirect('index')
 
 def update_profile(request):
@@ -161,7 +176,6 @@ def update_profile(request):
 
                 # Save the updated user data
                 collection.update_one({'username': username}, {"$set": user_data})
-                messages.success(request, 'Profile updated successfully!')
                 return redirect('profile_attempt')
 
     # If the request method is not POST or if there's an error, render the update profile page
@@ -252,6 +266,7 @@ def matches_attempt(request):
 
 def profile_attempt(request):
     username = request.session.get('username')
+    context = {}
 
     if username:
         collection = db['users_details']
@@ -261,15 +276,21 @@ def profile_attempt(request):
             name = user_data.get('name')
             profile_pic_path = user_data.get('profile_pic_path')
             about_me = user_data.get('about_me')
+            language_to_learn = user_data.get('language_to_learn')
+
+            # Retrieve the language name from the mapping
+            language_name = language_mapping.get(int(language_to_learn), "Unknown")
 
             context = {
                 'username': username,
                 'name': name,
                 'profile_pic_path': profile_pic_path,  # Add profile pic path to context
-                'about_me': about_me
+                'about_me': about_me,
+                'language_to_learn': language_name
             }
 
-    return render(request , 'profile.html',context)
+    return render(request, 'profile.html', context)
+
 
 def quiz_attempt(request):
     return render(request , 'quiz.html')
@@ -292,6 +313,8 @@ def resources_attempt(request):
 
     return render(request , 'resources.html',context)
 
+from django.shortcuts import render, redirect
+
 def settings_attempt(request):
     username = request.session.get('username')
 
@@ -303,13 +326,72 @@ def settings_attempt(request):
             name = user_data.get('name')
             profile_pic_path = user_data.get('profile_pic_path')
 
+            # Fetch user settings if available
+            users_settings_info = db['users_settings_info']
+            user_settings_data = users_settings_info.find_one({'username': username})
+
+            # If user settings exist, extract individual settings
+            if user_settings_data:
+                notification = user_settings_data.get('notification')
+                email_notification = user_settings_data.get('email_notification')
+                chat_notification = user_settings_data.get('chat_notification')
+                video_call_notification = user_settings_data.get('video_call_notification')
+            else:
+                # Provide default values if user settings do not exist
+                notification = False
+                email_notification = False
+                chat_notification = False
+                video_call_notification = False
+
             context = {
                 'username': username,
                 'name': name,
-                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+                'profile_pic_path': profile_pic_path,
+                'notification': notification,
+                'email_notification': email_notification,
+                'chat_notification': chat_notification,
+                'video_call_notification': video_call_notification
             }
+            
+            if request.method == 'POST':
+                # Process form submission and save/update settings data
+                notification = request.POST.get('notification')
+                email_notification = request.POST.get('email_notification')
+                chat_notification = request.POST.get('chat_notification')
+                video_call_notification = request.POST.get('video_call_notification')
+                
+                # Check if user settings already exist
+                if user_settings_data:
+                    # Update existing settings
+                    users_settings_info.update_one(
+                        {'username': username},
+                        {
+                            "$set": {
+                                'notification': notification,
+                                'email_notification': email_notification,
+                                'chat_notification': chat_notification,
+                                'video_call_notification': video_call_notification
+                            }
+                        }
+                    )
+                else:
+                    # Insert new settings
+                    settings_data = {
+                        'username': username,
+                        'notification': notification,
+                        'email_notification': email_notification,
+                        'chat_notification': chat_notification,
+                        'video_call_notification': video_call_notification
+                    }
+                    users_settings_info.insert_one(settings_data)
 
-    return render(request , 'settings.html',context)
+                # Redirect back to the settings page after saving settings
+                return redirect('settings_attempt')
+
+    return render(request, 'settings.html', context)
+
+
+
 
 def teacher_profile_attempt(request):
     username = request.session.get('username')
@@ -351,3 +433,6 @@ def playlist_attempt(request):
             }
 
     return render(request , 'playlist.html',context)
+
+
+
