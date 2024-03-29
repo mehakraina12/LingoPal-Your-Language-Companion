@@ -74,7 +74,7 @@
 </div>
 
 <section class="form-container">
-    
+    {% if languages %}
     <form action="" method="post" enctype="multipart/form-data" style="width: 100% !important;">
         {% csrf_token %}
     
@@ -85,14 +85,13 @@
         <style>
             table {
                 border-collapse: collapse;
-                width: 100%;
+                width: 90%;
             }
     
             th, td {
                 border: 1px solid black;
                 padding: 8px;
                 text-align: left;
-                width: 33.3%;
             }
     
             th {
@@ -131,6 +130,9 @@
             </tbody>
         </table>
     </form>
+    {% else %}
+    <p style="color: red; padding: 10px; text-align: center; font-size: 40px;">You have not selected any language. Please Go Back!</p>
+    {% endif %}
     
     
     
