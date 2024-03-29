@@ -40,7 +40,7 @@ urlpatterns = [
     path('playlist' , playlist_attempt , name='playlist_attempt'),
     path('verify' , verify_attempt , name='verify_attempt'),
     path('verifyEmail' , VerifyOTP , name='verifyEmail'),
+    path('take_test/<str:language>' , take_test , name='take_test'),
 
-
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

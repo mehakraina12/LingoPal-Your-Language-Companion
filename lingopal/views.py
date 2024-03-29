@@ -526,3 +526,30 @@ def playlist_attempt(request):
 
     return render(request , 'playlist.html',context)
 
+def take_test(request, language):
+
+    quiz_pages = {
+    'Arabic': 'quiz.html',
+    'Bengali': 'quiz_bengali.html',
+    'Chinese (Mandarin)': 'quiz_chinese.html',
+    'Dutch': 'quiz_dutch.html',
+    'English': 'quiz_english.html',
+    'French': 'quiz_french.html',
+    'German': 'quiz_german.html',
+    'Greek': 'quiz_greek.html',
+    'Gujarati': 'quiz_gujarati.html',
+    'Hindi': 'quiz_hindi.html',
+    'Italian': 'quiz_italian.html',
+    'Japanese': 'quiz_japanese.html',
+    'Kashmiri': 'quiz_kashmiri.html',
+    'Korean': 'quiz_korean.html',
+    'Odia': 'quiz_odia.html',
+    'Punjabi': 'quiz_punjabi.html',
+    'Russian': 'quiz_russian.html',
+    'Spanish': 'quiz_spanish.html',
+    'Telugu': 'quiz_telugu.html',
+    'Urdu': 'quiz_urdu.html',
+}
+    quiz_page = quiz_pages.get(language)
+
+    return render(request, quiz_page)
