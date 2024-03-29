@@ -84,8 +84,8 @@
     
         <style>
             table {
-                border-collapse: collapse;
-                width: 90%;
+                border-collapse:collapse;
+                width: 100%;
             }
     
             th, td {
@@ -102,29 +102,26 @@
         <table>
             <thead>
                 <tr>
-                    <th style="font-family: Arial, sans-serif; font-size: 20px;">Language</th>
-                    <th style="font-family: Arial, sans-serif; font-size: 20px;">Take Test</th>
-                    <th style="font-family: Arial, sans-serif; font-size: 20px;">Results</th>
+                    <th style="font-family: Arial, sans-serif; font-size: 20px; text-align: center;">Language</th>
+                    <th style="font-family: Arial, sans-serif; font-size: 20px; text-align: center;">Results</th>
+                    <th style="font-family: Arial, sans-serif; font-size: 20px; text-align: center;">Take Test</th>
                 </tr>
             </thead>
+            
             <tbody>
                 {% for language in languages %}
                 <tr>
-                    <td style="font-family: Arial, sans-serif; font-size: 20px;">{{ language }}</td>  
+                    <td style="font-family: Arial, sans-serif; font-size: 20px; text-align: center;">{{ language }}</td>  
                     <td style="font-family: Arial, sans-serif; font-size: 20px;">
                         <form action="/take_test" method="post">
                             {% csrf_token %}
                             <input type="hidden" name="language" value="{{ languages }}">
-                            <button type="submit">Take Test</button>
+                            <td style="text-align: center;">
+                                <input type="submit" value="Take Test" name="submit" class="btn" style="width: fit-content; margin: 0 auto;">
+                              </td>
                         </form>
                     </td>
-                    <td style="font-family: Arial, sans-serif; font-size: 20px;">
-                        <form action="/display_results" method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="language" value="{{ languages }}">
-                            <button type="submit">Display Results</button>
-                        </form>
-                    </td>
+                    
                 </tr>
                 {% endfor %}
             </tbody>
@@ -133,7 +130,6 @@
     {% else %}
     <p style="color: red; padding: 10px; text-align: center; font-size: 40px;">You have not selected any language. Please Go Back!</p>
     {% endif %}
-    
     
     
 </section>
