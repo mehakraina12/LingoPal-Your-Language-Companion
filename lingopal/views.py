@@ -351,7 +351,7 @@ def user_language(request):
             collection.insert_one(user_language_info)
 
         # Redirect the user to the test page or any other page as needed
-        return redirect('home_attempt')  # Replace 'home_attempt' with the URL name of your desired page
+        return redirect('language_test')  # Replace 'home_attempt' with the URL name of your desired page
 
     else:
         # Clear the error message if it exists
@@ -360,6 +360,31 @@ def user_language(request):
     return render(request, 'user_language.html', context)
 
 
+def language_test(request):
+    username = request.session.get('username')
+    context = {}
+
+    if username:
+        user_data = db['users_details'].find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            user_language_info = db['users_languages_info'].find_one({'username': username})
+
+            if user_language_info:
+                
+                languages = [language_mapping.get(int(lang_id), 'Unknown') for lang_id in user_language_info.get('languages', [])]
+
+            context = {
+                    'username': username,
+                    'name': name,
+                    'profile_pic_path': profile_pic_path,
+                    'languages': languages
+            }
+
+    return render(request, 'language_test.html', context)
 
 
 

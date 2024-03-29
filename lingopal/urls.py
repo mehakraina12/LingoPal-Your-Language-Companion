@@ -31,6 +31,7 @@ urlpatterns = [
     path('matches' , matches_attempt , name='matches_attempt'),
     path('profile' , profile_attempt , name='profile_attempt'),
     path('user_language' , user_language , name='user_language'),
+     path('language_test' , language_test , name='language_test'),
     path('update_profile' , update_profile , name='update_profile'),
     path('quiz' , quiz_attempt , name='quiz_attempt'),
     path('resources' , resources_attempt , name='resources_attempt'),
