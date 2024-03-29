@@ -291,6 +291,24 @@ def profile_attempt(request):
 
     return render(request, 'profile.html', context)
 
+def user_language(request):
+    username = request.session.get('username')
+
+    if username:
+        collection = db['users_details']
+        user_data = collection.find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'name': name,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+
+    return render(request , 'user_language.html',context)
 
 def quiz_attempt(request):
     return render(request , 'quiz.html')
