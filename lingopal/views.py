@@ -526,6 +526,3 @@ def playlist_attempt(request):
 
     return render(request , 'playlist.html',context)
 
-def Arabic_quiz(request):
-    return render(request , 'Arabic_quiz.html')
-
