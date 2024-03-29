@@ -5,7 +5,7 @@
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>register</title>
+   <title>user_language</title>
 
    <!-- font awesome cdn link  -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
@@ -73,7 +73,12 @@
 
 </div>
 
+{% if error_message %}
+<p style="background-color: #ffcccc; color: red; padding: 10px; text-align: center; font-size: 20px;">{{ error_message }}</p>
+{% endif %}
+
 <section class="form-container">
+    
    <form action="" method="post" enctype="multipart/form-data">
       {%  csrf_token %}
 
@@ -82,56 +87,32 @@
       </div>
       <p>Enter languages you are familiar with <span>*</span></p>
       <select name="native_languages" id="native_languages" multiple>
-         <option value="1">Arabic</option>
-         <option value="2">Assamese</option>
-         <option value="3">Bengali</option>
-         <option value="4">Bodo</option>
-         <option value="5">Chinese (Mandarin)</option>
-         <option value="6">Danish</option>
-         <option value="7">Dogri</option>
-         <option value="8">Dutch</option>
-         <option value="9">English</option>
-         <option value="10">French</option>
-         <option value="11">German</option>
-         <option value="12">Greek</option>
-         <option value="13">Gujarati</option>
-         <option value="14">Hawaiian</option>
-         <option value="15">Hebrew</option>
-         <option value="16">Hindi</option>
-         <option value="17">Hungarian</option>
-         <option value="18">Italian</option>
-         <option value="19">Japanese</option>
-         <option value="20">Kannada</option>
-         <option value="21">Kashmiri</option>
-         <option value="22">Khasi</option>
-         <option value="23">Korean</option>
-         <option value="24">Konkani</option>
-         <option value="25">Maithili</option>
-         <option value="26">Malayalam</option>
-         <option value="27">Manipuri</option>
-         <option value="28">Marathi</option>
-         <option value="29">Nepali</option>
-         <option value="30">Norwegian</option>
-         <option value="31">Odia</option>
-         <option value="32">Punjabi</option>
-         <option value="33">Portuguese</option>
-         <option value="34">Polish</option>
-         <option value="35">Russian</option>
-         <option value="36">Sanskrit</option>
-         <option value="37">Santali</option>
-         <option value="38">Sindhi</option>
-         <option value="39">Spanish</option>
-         <option value="40">Sanskrit</option>
-         <option value="41">Sindhi</option>
-         <option value="42">Tamil</option>
-         <option value="43">Telugu</option>
-         <option value="44">Thai</option>
-         <option value="45">Tulu</option>
-         <option value="46">Turkish</option>
-         <option value="47">Urdu</option>
-         <option value="48">Vietnamese</option>
-         <option value="49">Swahili</option>
-         <option value="50">Swedish</option>
+        <option value=""> </option>
+        <option value="1">Arabic</option>
+        <option value="2">Bengali</option>
+        <option value="3">Chinese (Mandarin)</option>
+        <option value="4">Dutch</option>
+        <option value="5">English</option>
+        <option value="6">French</option>
+        <option value="7">German</option>
+        <option value="8">Greek</option>
+        <option value="9">Gujarati</option>
+        <option value="10">Hindi</option>
+        <option value="11">Italian</option>
+        <option value="12">Japanese</option>
+        <option value="13">Kashmiri</option>
+        <option value="14">Korean</option>
+        <option value="15">Odia</option>
+        <option value="16">Punjabi</option>
+        <option value="17">Portuguese</option>
+        <option value="18">Russian</option>
+        <option value="19">Spanish</option>
+        <option value="20">Telugu</option>
+        <option value="21">Thai</option>
+        <option value="22">Urdu</option>
+        <option value="23">Vietnamese</option>
+        <option value="24">Swahili</option>
+        <option value="25">Swedish</option>
      </select>
      
       

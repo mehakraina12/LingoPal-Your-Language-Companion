@@ -291,8 +291,11 @@ def profile_attempt(request):
 
     return render(request, 'profile.html', context)
 
+
+
 def user_language(request):
     username = request.session.get('username')
+    context = {}
 
     if username:
         collection = db['users_details']
@@ -301,14 +304,65 @@ def user_language(request):
         if user_data:
             name = user_data.get('name')
             profile_pic_path = user_data.get('profile_pic_path')
+            language_to_learn = user_data.get('language_to_learn')
 
             context = {
                 'username': username,
                 'name': name,
-                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+                'profile_pic_path': profile_pic_path,
+                'language_to_learn': language_to_learn
             }
 
-    return render(request , 'user_language.html',context)
+    if request.method == 'POST':
+        native_languages = request.POST.getlist('native_languages')
+
+        # Check if language_to_learn and selected language are the same
+        for language in native_languages:
+            if language == language_to_learn:
+                context['error_message'] = "Language to learn and language you want to teach cannot be the same!"
+                return render(request, 'user_language.html', context)
+
+        # Check if user language info already exists
+        collection = db['users_languages_info']
+        user_language_info = collection.find_one({'username': username})
+        
+        if user_language_info:
+            # Append new languages to existing languages
+            existing_languages = user_language_info.get('languages', [])
+            updated_languages = list(set(existing_languages + native_languages))
+            
+            # Update existing user language info
+            collection.update_one(
+                {'username': username},
+                {
+                    "$set": {
+                        'language_to_learn': language_to_learn,
+                        'languages': updated_languages
+                    }
+                }
+            )
+        else:
+            # Insert new user language info
+            user_language_info = {
+                'username': username,
+                'language_to_learn': language_to_learn,
+                'languages': native_languages
+            }
+            collection.insert_one(user_language_info)
+
+        # Redirect the user to the test page or any other page as needed
+        return redirect('home_attempt')  # Replace 'home_attempt' with the URL name of your desired page
+
+    else:
+        # Clear the error message if it exists
+        context.pop('error_message', None)
+
+    return render(request, 'user_language.html', context)
+
+
+
+
+
 
 def quiz_attempt(request):
     return render(request , 'quiz.html')
