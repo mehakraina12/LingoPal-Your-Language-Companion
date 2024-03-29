@@ -33,15 +33,10 @@ language_mapping = {
     14: "Korean",
     15: "Odia",
     16: "Punjabi",
-    17: "Portuguese",
-    18: "Russian",
-    19: "Spanish",
-    20: "Telugu",
-    21: "Thai",
-    22: "Urdu",
-    23: "Vietnamese",
-    24: "Swahili",
-    25: "Swedish"
+    17: "Russian",
+    18: "Spanish",
+    19: "Telugu",
+    20: "Urdu",
 }
 
 def upload_to_imgbb(image_file):
