@@ -10,6 +10,12 @@ const enableDarkMode = () => {
    document.querySelectorAll('.notification-title, .button i').forEach(element => {
        element.style.color = 'white'; // Change color of notification titles and icons to white
    });
+   document.querySelectorAll('td[style*="font-family: Arial"], td[style*="font-size: 20px;"]').forEach(td => {
+      td.style.color = 'white';
+  });
+  document.querySelectorAll('td').forEach(td => {
+   td.style.border = '1px solid white';
+});
 }
 
 const disableDarkMode = () => {
@@ -20,6 +26,12 @@ const disableDarkMode = () => {
    document.querySelectorAll('.notification-title, .button i').forEach(element => {
       element.style.color = 'black'; // Change color of notification titles and icons to white
   });
+  document.querySelectorAll('td[style*="font-family: Arial"], td[style*="font-size: 20px;"]').forEach(td => {
+   td.style.color = 'black';
+});
+document.querySelectorAll('td').forEach(td => {
+   td.style.border = '1px solid black';
+});
 }
 
 
