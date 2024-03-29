@@ -526,5 +526,3 @@ def playlist_attempt(request):
 
     return render(request , 'playlist.html',context)
 
-
-

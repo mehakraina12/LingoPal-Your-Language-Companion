@@ -41,5 +41,6 @@ urlpatterns = [
     path('verify' , verify_attempt , name='verify_attempt'),
     path('verifyEmail' , VerifyOTP , name='verifyEmail'),
 
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
