@@ -1,0 +1,156 @@
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>register</title>
+
+   <!-- font awesome cdn link  -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+
+   <!-- custom css file link  -->
+   <link rel="stylesheet" href="static/css/style1.css">
+   <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/js/multi-select-tag.js"></script>
+   
+</head>
+<body>
+
+<header class="header">
+   
+   <section class="flex">
+
+      <a href="{% url 'index'%}" class="logo"><img src="static/images/logo.png" width="250" height="70" alt="LingoPal Logo"></a>
+
+      <form action="search.html" method="post" class="search-form">
+         <input type="text" name="search_box" required placeholder="search courses..." maxlength="100">
+         <button type="submit" class="fas fa-search"></button>
+      </form>
+
+      <div class="icons">
+         <div id="menu-btn" class="fas fa-bars"></div>
+         <div id="search-btn" class="fas fa-search"></div>
+         <div id="user-btn" class="fas fa-user"></div>
+         <div id="toggle-btn" class="fas fa-moon"></div>
+      </div>
+
+      <div class="profile">
+         <img src="static/images/pic-1.jpg" class="image" alt="">
+         <h3 class="name">Name</h3>
+         <p class="role">Username</p>
+         <a href="{% url 'profile_attempt'%}" class="btn">view profile</a>
+         <div class="flex-btn">
+            <a href="{% url 'login_attempt'%}" class="option-btn">login</a>
+            <a href="{% url 'register_attempt'%}" class="option-btn">register</a>
+         </div>
+      </div>
+
+   </section>
+
+</header>   
+
+<div class="side-bar">
+
+   <div id="close-btn">
+      <i class="fas fa-times"></i>
+   </div>
+
+   <div class="profile">
+      <img src="{{ profile_pic_path }}" class="image" alt="Profile Picture">
+      <h3 class="name">{{name}}</h3>
+      <p class="role">{{username}}</p>
+      <a href="{% url 'profile_attempt'%}" class="btn">view profile</a>
+   </div>
+
+   <nav class="navbar">
+      <a href="{% url 'home_attempt'%}"><i class="fas fa-home"></i><span>Home</span></a>
+      <a href="{% url 'resources_attempt'%}"><i class="fas fa-graduation-cap"></i><span>Resources</span></a>
+      <a href="{% url 'matches_attempt'%}"><i class="fas fa-chalkboard-user"></i><span>Matches</span></a>
+      <a href="{% url 'feedback_attempt'%}"><i class="fas fa-headset"></i><span>Support/Contact us</span></a>
+      <a href="{% url 'settings_attempt'%}"><i class="fas fa-gear"></i><span>Settings</span></a>
+   </nav>
+
+</div>
+
+<section class="form-container">
+   <form action="" method="post" enctype="multipart/form-data">
+      {%  csrf_token %}
+
+      <div id="settings" class="settings-container">
+         <h3 style="color: white;">Language Proficiency</h3>
+      </div>
+      <p>Enter languages you are familiar with <span>*</span></p>
+      <select name="native_languages" id="native_languages" multiple>
+         <option value="1">Arabic</option>
+         <option value="2">Assamese</option>
+         <option value="3">Bengali</option>
+         <option value="4">Bodo</option>
+         <option value="5">Chinese (Mandarin)</option>
+         <option value="6">Danish</option>
+         <option value="7">Dogri</option>
+         <option value="8">Dutch</option>
+         <option value="9">English</option>
+         <option value="10">French</option>
+         <option value="11">German</option>
+         <option value="12">Greek</option>
+         <option value="13">Gujarati</option>
+         <option value="14">Hawaiian</option>
+         <option value="15">Hebrew</option>
+         <option value="16">Hindi</option>
+         <option value="17">Hungarian</option>
+         <option value="18">Italian</option>
+         <option value="19">Japanese</option>
+         <option value="20">Kannada</option>
+         <option value="21">Kashmiri</option>
+         <option value="22">Khasi</option>
+         <option value="23">Korean</option>
+         <option value="24">Konkani</option>
+         <option value="25">Maithili</option>
+         <option value="26">Malayalam</option>
+         <option value="27">Manipuri</option>
+         <option value="28">Marathi</option>
+         <option value="29">Nepali</option>
+         <option value="30">Norwegian</option>
+         <option value="31">Odia</option>
+         <option value="32">Punjabi</option>
+         <option value="33">Portuguese</option>
+         <option value="34">Polish</option>
+         <option value="35">Russian</option>
+         <option value="36">Sanskrit</option>
+         <option value="37">Santali</option>
+         <option value="38">Sindhi</option>
+         <option value="39">Spanish</option>
+         <option value="40">Sanskrit</option>
+         <option value="41">Sindhi</option>
+         <option value="42">Tamil</option>
+         <option value="43">Telugu</option>
+         <option value="44">Thai</option>
+         <option value="45">Tulu</option>
+         <option value="46">Turkish</option>
+         <option value="47">Urdu</option>
+         <option value="48">Vietnamese</option>
+         <option value="49">Swahili</option>
+         <option value="50">Swedish</option>
+     </select>
+     
+      
+   
+  <script>
+   new MultiSelectTag('native_languages')  // id
+</script>
+      <input type="submit" value="Take Proficiency Test" name="submit" class="btn">
+
+   </form>
+</section>
+
+
+
+
+<!-- custom js file link  -->
+<script src="static/js/script1.js"></script>
+
+   
+</body>
+</html>
+{% endblock %}
