@@ -529,7 +529,7 @@ def playlist_attempt(request):
 def take_test(request, language):
 
     quiz_pages = {
-    'Arabic': 'quiz.html',
+    'Arabic': 'quiz_arabic.html',
     'Bengali': 'quiz_bengali.html',
     'Chinese (Mandarin)': 'quiz_chinese.html',
     'Dutch': 'quiz_dutch.html',
