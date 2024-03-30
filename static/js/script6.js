@@ -1,82 +1,82 @@
 const questions = [
     {
-        question: "What is the verb 'to be' in Arabic?",
+        question: "Which of the following is the correct translation of 'apple' in Bengali?",
         answers: [
-            { text: "Kana - كان", correct: true},
-            { text: "Howa - هو", correct: false},
-            { text: "Raqm - رقم", correct: false},
+            { text: "আপেল", correct: true},
+            { text: "আম", correct: false},
+            { text: "পেঁপে", correct: false},
         ]
     },
     {
-        question: "What is the definite article 'the' in Arabic?",
+        question: "Which of the following is the correct translation of 'sunshine' into Bengali?",
         answers: [
-            { text: "La - لا", correct: false},
-            { text: "Al - ال", correct: true},
-            { text: "Ba - با", correct: false},
+            { text: "প্রকাশ", correct: false},
+            { text: "আলো", correct: true},
+            { text: "রঙিন", correct: false},
         ]
     },
     {
-        question: "What is the word order in Arabic sentences?",
+        question: "Which of the following proverbs translates to 'যত্নের প্রথম টুকরা নয়' in Bengali?",
         answers: [
-            { text: "Subject-Verb-Object", correct: false},
-            { text: "Verb-Subject-Object", correct: true},
-            { text: "Verb-Object-Subject", correct: false},
+            { text: "A stitch in time saves nine.", correct: false},
+            { text: "Better late than never.", correct: true},
+            { text: "Early bird catches the worm.", correct: false},
         ]
     },
     {
-        question: "What is the plural form of the word 'kitab' (book - كتاب)?",
+        question: "Which of the following Bengali words means 'friend'?",
         answers: [
-            { text: "Kutub - كتب", correct: true},
-            { text: "Katabat - كتابات", correct: false},
-            { text: "Kitabin - كتابين", correct: false},
+            { text: "বন্ধু", correct: true},
+            { text: "শত্রু", correct: false},
+            { text: "প্রিয় ", correct: false},
         ]
     },
     {
-        question: "Which preposition means 'in' or 'at' in Arabic?",
+        question: "In Bengali grammar, which tense is formed using the auxiliary verb 'গেলে' (gele)?",
         answers: [
-            { text: "Min - من", correct: false},
-            { text: "Ila - إلى", correct: false},
-            { text: "Fi - في", correct: true},
+            { text: "Past continuous", correct: false},
+            { text: "Future perfect", correct: false},
+            { text: "Past perfect", correct: true},
         ]
     },
     {
-        question: "What does the Arabic word 'shukran - شكراً' mean?",
+        question: "Choose the appropriate preposition to complete the sentence: 'তিনি সমুদ্রে _____ পড়লেন' (He fell into the sea).",
         answers: [
-            { text: "Hello", correct: false},
-            { text: "Thank you", correct: true},
-            { text: "Sorry", correct: false},
+            { text: "সঙ্গে", correct: true},
+            { text: "দ্বারা", correct: false},
+            { text: "বাহনে", correct: false},
         ]
     },
     {
-        question: "Which letter of the Arabic alphabet is pronounced as a glottal stop?",
+        question: "What is the Bengali word for 'rain'?",
         answers: [
-            { text: "Ha - ه", correct: false},
-            { text: "Kaf - ك", correct: false},
-            { text: "Hamza - ء", correct: true},
+            { text: "বৃষ্টি (bristi)", correct: true},
+            { text: "তুষার (tushar)", correct: false},
+            { text: "আলো (alo)", correct: false},
         ]
     },
     {
-        question: "Which of the following is NOT a type of Arabic verb?",
+        question: "In Bengali grammar, which case particle is used to indicate the direct object?",
         answers: [
-            { text: "Past", correct: false},
-            { text: "Present", correct: true},
-            { text: "Future", correct: false},
+            { text: " কে (ke)", correct: true},
+            { text: "কেক (kek)", correct: false},
+            { text: " কেকে (keke)", correct: false},
         ]
     },
     {
-        question: "What is the term for the Arabic grammatical construction that indicates the doer of an action?",
+        question: "What does the Bengali phrase 'মাঝে মাঝে' (majhe majhe) commonly signify?",
         answers: [
-            { text: "Fa'il - فاعل", correct: true},
-            { text: "Ism - إسم", correct: false},
-            { text: "Fi'il - فعل", correct: false},
+            { text: "In the middle", correct: false},
+            { text: "Every time", correct: false},
+            { text: "Occasionally", correct: true},
         ]
     },
     {
-        question: "'Patience is the key to relief' is a popular Arabic saying. Which Arabic word is used for 'patience' in this saying?",
+        question: "Choose the appropriate word to complete the sentence: 'তিনি রোজ ______ পড়তে থাকেন' (Tini roj ______ porate thaken).",
         answers: [
-            { text: "Al Shukr - الشكر", correct: false},
-            { text: "Al Sabr - الصبر", correct: true},
-            { text: "Al Moftah - المفتاح", correct: false},
+            { text: "কম্পিউটার (computer)", correct: false},
+            { text: "বই (book)", correct: true},
+            { text: "গান (song)", correct: false},
         ]
     },
 
