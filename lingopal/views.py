@@ -106,7 +106,6 @@ def register_attempt(request):
             'language_to_learn': language_to_learn,
             'about_me': about_me,
             'profile_pic_path': imgbb_url,
-            'password':password
         }
 
         # Generate and send verification email
@@ -384,21 +383,21 @@ def language_test(request):
 
             if user_language_info:
                 languages = [language_mapping.get(int(lang_id), 'Unknown') for lang_id in user_language_info.get('languages', [])]
-                
+
                 # Fetch scores for each language from the users_native_languages collection
                 language_scores = {}
                 user_native_languages = db['users_native_langauges'].find_one({'username': username})
-
-                # Check if user_native_languages document exists, if not create one
-                if user_native_languages is None:
-                    user_native_languages = {'username': username, 'languages': {}}
-                    db['users_native_langauges'].insert_one(user_native_languages)
-
-                for language in languages:
-                    language_score = user_native_languages['languages'].get(language)
-                    if language_score is not None:
-                        language_score = int(language_score)
-                    language_scores[language] = language_score
+                if user_native_languages:  # Check if user_native_languages is not None
+                    for language in languages:
+                        language_score = user_native_languages.get(language)
+                        if language_score is not None:
+                            language_score = int(language_score)
+                        language_scores[language] = language_score
+                else:
+                    # If user_native_languages is None, create a new document with default scores
+                    default_scores = {language: None for language in languages}
+                    db['users_native_langauges'].insert_one({'username': username, **default_scores})
+                    language_scores = default_scores
 
                 language_score_list = [(language, language_scores[language]) for language in languages]
 
@@ -419,7 +418,6 @@ def language_test(request):
                         )
 
     return render(request, 'language_test.html', context)
-
 
 
 def quiz_attempt(request):

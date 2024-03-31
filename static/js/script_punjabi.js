@@ -52,7 +52,7 @@ const questions = [
         question: "What does 'ਕੀ ਹਾਲ ਹੈ?' (ki haal hai?) mean in English?",
         answers: [
             { text: "Where are you?", correct: false},
-            { text: "How are you?", correct: false},
+            { text: "Who are you?", correct: false},
             { text: "How are you?", correct: true},
         ]
     },
