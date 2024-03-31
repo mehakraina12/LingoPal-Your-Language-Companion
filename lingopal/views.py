@@ -402,6 +402,15 @@ def language_test(request):
                     'language_score_list': language_score_list,  # Pass language scores as a list of tuples
                 }
 
+                # Update native_languages field if score is >= 8
+                for lang_id, score in language_score_list:
+                    if score is not None and score >= 8:
+                        db['users_details'].update_one(
+                            {'username': username},
+                            {'$addToSet': {'native_languages': lang_id}}
+                        )
+
+
     return render(request, 'language_test.html', context)
 
 
