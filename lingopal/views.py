@@ -102,6 +102,7 @@ def register_attempt(request):
             'name': name,
             'email': email,
             'username': username,
+            'password': hashed_password,
             'language_to_learn': language_to_learn,
             'about_me': about_me,
             'profile_pic_path': imgbb_url,
@@ -387,8 +388,14 @@ def language_test(request):
                 # Fetch scores for each language from the users_native_languages collection
                 language_scores = {}
                 user_native_languages = db['users_native_langauges'].find_one({'username': username})
+
+                # Check if user_native_languages document exists, if not create one
+                if user_native_languages is None:
+                    user_native_languages = {'username': username, 'languages': {}}
+                    db['users_native_langauges'].insert_one(user_native_languages)
+
                 for language in languages:
-                    language_score = user_native_languages.get(language)
+                    language_score = user_native_languages['languages'].get(language)
                     if language_score is not None:
                         language_score = int(language_score)
                     language_scores[language] = language_score
@@ -411,8 +418,8 @@ def language_test(request):
                             {'$addToSet': {'native_languages': lang_id}}
                         )
 
-
     return render(request, 'language_test.html', context)
+
 
 
 def quiz_attempt(request):
