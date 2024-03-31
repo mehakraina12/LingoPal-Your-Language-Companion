@@ -1,3 +1,4 @@
+const csrftoken = document.cookie.match(/csrftoken=([^ ;]+)/)[1];
 const questions = [
     {
         question: "Which of the following is the correct way to say 'hello' in Mandarin Chinese?",
@@ -151,6 +152,19 @@ function showScore() {
     questionElement.innerHTML = `Thank you for attempting the quiz. You may exit the quiz now.<br>You scored ${score} out of ${questions.length}!<br>${message}`;
     nextButton.innerHTML = "Exit";
     nextButton.style.display = "block";
+
+    $.ajax({
+        url: '/result_update',
+        type: 'POST',
+        data: {
+            'lang': 'Chinese',
+            'score': score,
+        },
+        dataType: 'json',
+        headers: {
+            'X-CSRFToken': csrftoken  // Include CSRF token in headers
+        }
+    })
 }
 
 
