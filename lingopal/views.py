@@ -371,7 +371,6 @@ def user_language(request):
 def language_test(request):
     username = request.session.get('username')
     context = {}
-
     if username:
         user_data = db['users_details'].find_one({'username': username})
 
@@ -382,19 +381,24 @@ def language_test(request):
             user_language_info = db['users_languages_info'].find_one({'username': username})
 
             if user_language_info:
-                
                 languages = [language_mapping.get(int(lang_id), 'Unknown') for lang_id in user_language_info.get('languages', [])]
+                
+                # Fetch scores for each language from the users_native_languages collection
+                language_scores = {}
+                user_native_languages = db['users_native_langauges'].find_one({'username': username})
+                for language in languages:
+                    language_score = user_native_languages.get(language)
+                    language_scores[language] = language_score
 
-            context = {
+                context = {
                     'username': username,
                     'name': name,
                     'profile_pic_path': profile_pic_path,
-                    'languages': languages
+                    'languages': languages,
+                    'language_scores': language_scores,  # Pass language scores as a dictionary
                 }
 
     return render(request, 'language_test.html', context)
-
-
 
 
 def quiz_attempt(request):
