@@ -29,7 +29,7 @@ language_mapping = {
     10: "Hindi",
     11: "Italian",
     12: "Japanese",
-    13: "Kashmiri",
+    13: "Tamil",
     14: "Korean",
     15: "Odia",
     16: "Punjabi",
@@ -391,8 +391,7 @@ def language_test(request):
                     if language_score is not None:
                         language_score = int(language_score)
                     language_scores[language] = language_score
-                    print(language,":",language_score)
-                    
+
                 language_score_list = [(language, language_scores[language]) for language in languages]
 
                 context = {

@@ -134,11 +134,18 @@
                         
                         <form style="font-family: Arial, sans-serif; font-size: 20px;" action="/take_test/{{ language }}" method="post" target="_blank">
                             {% csrf_token %}
-                            <input type="hidden" name="language" value="{{ languages }}">
+                            <input type="hidden" name="language" value="{{ language }}">
                             <td style="text-align: center;">
-                                <input type="submit" value="Take Test" name="submit" class="btn" style="width: fit-content; margin: 0 auto;">
+                                {% if score is not none and score >= 8 %}
+                                    <button disabled style="width: fit-content; margin: 0 auto; background-color: grey; cursor: not-allowed;">
+                                        Take Test
+                                    </button>
+                                {% else %}
+                                    <input type="submit" value="Take Test" name="submit" class="btn" style="width: fit-content; margin: 0 auto;">
+                                {% endif %}
                             </td>
-                            </form>
+                        </form>
+
                     </tr>               
                 {% endfor %}
             </tbody>
