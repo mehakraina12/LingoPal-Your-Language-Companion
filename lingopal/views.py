@@ -541,7 +541,7 @@ def take_test(request, language):
     'Hindi': 'quiz_hindi.html',
     'Italian': 'quiz_italian.html',
     'Japanese': 'quiz_japanese.html',
-    'Kashmiri': 'quiz_kashmiri.html',
+    'Tamil': 'quiz_tamil.html',
     'Korean': 'quiz_korean.html',
     'Odia': 'quiz_odia.html',
     'Punjabi': 'quiz_punjabi.html',
