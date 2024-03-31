@@ -286,7 +286,20 @@ def profile_attempt(request):
 
     return render(request, 'profile.html', context)
 
-
+def result_update(request):
+    username = request.session.get('username')
+    if request.method == 'POST':
+        lang = request.POST.get('lang')
+        score = request.POST.get('score')
+        # Assuming you have a MongoDB connection named db
+        native_languages_collection = db['users_native_langauges']
+       # Update the user's score for the language
+        native_languages_collection.update_one(
+        {'username': username},
+        {'$set': {f'{lang}': score}},
+            upsert=True  
+        )
+    return render(request, 'language_test.html')
 
 def user_language(request):
     username = request.session.get('username')
@@ -377,7 +390,7 @@ def language_test(request):
                     'name': name,
                     'profile_pic_path': profile_pic_path,
                     'languages': languages
-            }
+                }
 
     return render(request, 'language_test.html', context)
 
@@ -553,3 +566,4 @@ def take_test(request, language):
     quiz_page = quiz_pages.get(language)
 
     return render(request, quiz_page)
+
