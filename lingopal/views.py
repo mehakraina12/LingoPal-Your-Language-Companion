@@ -105,6 +105,7 @@ def register_attempt(request):
             'language_to_learn': language_to_learn,
             'about_me': about_me,
             'profile_pic_path': imgbb_url,
+            'password':password
         }
 
         # Generate and send verification email
