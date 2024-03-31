@@ -41,6 +41,7 @@ urlpatterns = [
     path('verify' , verify_attempt , name='verify_attempt'),
     path('verifyEmail' , VerifyOTP , name='verifyEmail'),
     path('take_test/<str:language>' , take_test , name='take_test'),
+    path('result_update' , result_update , name='result_update'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

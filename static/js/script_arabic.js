@@ -1,3 +1,4 @@
+const csrftoken = document.cookie.match(/csrftoken=([^ ;]+)/)[1];
 const questions = [
     {
         question: "What is the verb 'to be' in Arabic?",
@@ -151,7 +152,22 @@ function showScore() {
     questionElement.innerHTML = `Thank you for attempting the quiz. You may exit the quiz now.<br>You scored ${score} out of ${questions.length}!<br>${message}`;
     nextButton.innerHTML = "Exit";
     nextButton.style.display = "block";
+
+    // Pass the score and message to the server for Arabic language
+    $.ajax({
+        url: '/result_update',
+        type: 'POST',
+        data: {
+            'lang': 'Arabic',
+            'score': score,
+        },
+        dataType: 'json',
+        headers: {
+            'X-CSRFToken': csrftoken  // Include CSRF token in headers
+        }
+    })
 }
+
 
 
 function handleNextButton(){
