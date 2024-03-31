@@ -27,8 +27,8 @@ const questions = [
     {
         question: "What is the past tense of the verb 'to eat'?",
         answers: [
-            { text: "Ate", correct: false},
-            { text: "Eating", correct: true},
+            { text: "Ate", correct: true},
+            { text: "Eating", correct: false},
             { text: "Eaten", correct: false},
         ]
     },
