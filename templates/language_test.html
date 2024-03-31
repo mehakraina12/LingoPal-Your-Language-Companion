@@ -105,6 +105,11 @@
                 color: red;
                 font-weight: bold;
             }
+            .disabled-btn {
+                
+            background-color: grey; /* Retains original background color */
+            cursor: not-allowed; /* Retains original cursor style */
+        }
         </style>
     
         <table>
@@ -137,7 +142,7 @@
                             <input type="hidden" name="language" value="{{ language }}">
                             <td style="text-align: center;">
                                 {% if score is not none and score >= 8 %}
-                                    <button disabled style="width: fit-content; margin: 0 auto; background-color: grey; cursor: not-allowed;">
+                                    <button disabled class="btn disabled-btn" style="width: fit-content; margin: 0 auto;">
                                         Take Test
                                     </button>
                                 {% else %}
