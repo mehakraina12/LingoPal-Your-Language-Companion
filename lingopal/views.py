@@ -388,14 +388,19 @@ def language_test(request):
                 user_native_languages = db['users_native_langauges'].find_one({'username': username})
                 for language in languages:
                     language_score = user_native_languages.get(language)
+                    if language_score is not None:
+                        language_score = int(language_score)
                     language_scores[language] = language_score
+                    print(language,":",language_score)
+                    
+                language_score_list = [(language, language_scores[language]) for language in languages]
 
                 context = {
                     'username': username,
                     'name': name,
                     'profile_pic_path': profile_pic_path,
                     'languages': languages,
-                    'language_scores': language_scores,  # Pass language scores as a dictionary
+                    'language_score_list': language_score_list,  # Pass language scores as a list of tuples
                 }
 
     return render(request, 'language_test.html', context)

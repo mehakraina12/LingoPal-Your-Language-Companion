@@ -97,6 +97,14 @@
             th {
                 background-color: #f2f2f2;
             }
+            .approved {
+                color: green;
+                font-weight: bold;
+            }
+            .rejected {
+                color: red;
+                font-weight: bold;
+            }
         </style>
     
         <table>
@@ -109,27 +117,27 @@
             </thead>
             
             <tbody>
-                    {% for language in languages %}
+                {% for language, score in language_score_list %}
                     <tr>
                         <td style="font-family: Arial, sans-serif; font-size: 20px; text-align: center;">{{ language }}</td>  
-                        <td style="font-family: Arial, sans-serif; font-size: 20px;">
-                            {% if language_scores.language is not none %}
-                                {% if language_scores.language >= 8 %}
-                                    Approved
+                        <td style="font-family: Arial, sans-serif; font-size: 20px; text-align: center;">
+                            {% if score is not None %}
+                                {% if score >= 8 %}
+                                    <span class="approved">Approved</span> <br>  Score : {{ score }}/10
                                 {% else %}
-                                    Rejected
+                                <span class="rejected">Rejected</span> <br>  Score : {{ score }}/10
                                 {% endif %}
                             {% else %}
-                                Score not available
+                                Pending
                             {% endif %}
                         </td>
                         
-                            <form style="font-family: Arial, sans-serif; font-size: 20px;" action="/take_test/{{ language }}" method="post" target="_blank">
-                                {% csrf_token %}
-                                <input type="hidden" name="language" value="{{ languages }}">
-                                <td style="text-align: center;">
-                                    <input type="submit" value="Take Test" name="submit" class="btn" style="width: fit-content; margin: 0 auto;">
-                                </td>
+                        <form style="font-family: Arial, sans-serif; font-size: 20px;" action="/take_test/{{ language }}" method="post" target="_blank">
+                            {% csrf_token %}
+                            <input type="hidden" name="language" value="{{ languages }}">
+                            <td style="text-align: center;">
+                                <input type="submit" value="Take Test" name="submit" class="btn" style="width: fit-content; margin: 0 auto;">
+                            </td>
                             </form>
                     </tr>               
                 {% endfor %}
