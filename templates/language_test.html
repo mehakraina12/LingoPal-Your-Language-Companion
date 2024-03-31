@@ -113,8 +113,8 @@
                     <tr>
                         <td style="font-family: Arial, sans-serif; font-size: 20px; text-align: center;">{{ language }}</td>  
                         <td style="font-family: Arial, sans-serif; font-size: 20px;">
-                            {% if language_scores[language] is not none %}
-                                {% if language_scores[language] >= 8 %}
+                            {% if language_scores.language is not None %}
+                                {% if language_scores.language >= 8 %}
                                     Approved
                                 {% else %}
                                     Rejected
