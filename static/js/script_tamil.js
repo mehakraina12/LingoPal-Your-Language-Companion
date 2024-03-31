@@ -144,13 +144,25 @@ function showScore() {
     resetState();
     let message = "";
     if (score >= 8) {
-        message = "Accepted";
+        message = "<br><span style='color: green; font-size: small;'>We are pleased to inform you that you have been selected to teach. Your proficiency in this language meet our standards, and we believe you will be an excellent addition to our team of instructors.</span>";
     } else {
-        message = "Rejected";
+        message = "<br><span style='color: red; font-size: small;'>We regret to inform you that we are unable to offer you to teach at this time, as our instructors must meet specific proficiency standards which you do not currently fulfill.</span>";
     }
-    questionElement.innerHTML = `Thank you for attempting the quiz. You may exit the quiz now.<br>You scored ${score} out of ${questions.length}!<br>${message}`;
-    nextButton.innerHTML = "Exit";
-    nextButton.style.display = "block";
+    message += "<br><br>You may close the tab now";
+    questionElement.innerHTML = `Thank you for attempting the quiz.<br>You scored ${score} out of ${questions.length}!<br>${message}`;
+
+    $.ajax({
+        url: '/result_update',
+        type: 'POST',
+        data: {
+            'lang': 'Tamil',
+            'score': score,
+        },
+        dataType: 'json',
+        headers: {
+            'X-CSRFToken': csrftoken  // Include CSRF token in headers
+        }
+    })
 }
 
 
