@@ -103,7 +103,7 @@
             <thead>
                 <tr>
                     <th style="font-family: Arial, sans-serif; font-size: 20px; text-align: center;">Language</th>
-                    <th style="font-family: Arial, sans-serif; font-size: 20px; text-align: center; width: 50px;">Results</th>
+                    <th style="font-family: Arial, sans-serif; font-size: 20px; text-align: center;">Results</th>
                     <th style="font-family: Arial, sans-serif; font-size: 20px; text-align: center;">Take Test</th>
                 </tr>
             </thead>
@@ -113,8 +113,8 @@
                     <tr>
                         <td style="font-family: Arial, sans-serif; font-size: 20px; text-align: center;">{{ language }}</td>  
                         <td style="font-family: Arial, sans-serif; font-size: 20px;">
-                            {% if language_scores[language] is not none %}
-                                {% if language_scores[language] >= 8 %}
+                            {% if language_scores.language is not none %}
+                                {% if language_scores.language >= 8 %}
                                     Approved
                                 {% else %}
                                     Rejected
@@ -124,15 +124,13 @@
                             {% endif %}
                         </td>
                         
-                        <td style="font-family: Arial, sans-serif; font-size: 20px;">
-                            <form action="/take_test/{{ language }}" method="post" target="_blank">
+                            <form style="font-family: Arial, sans-serif; font-size: 20px;" action="/take_test/{{ language }}" method="post" target="_blank">
                                 {% csrf_token %}
                                 <input type="hidden" name="language" value="{{ languages }}">
                                 <td style="text-align: center;">
                                     <input type="submit" value="Take Test" name="submit" class="btn" style="width: fit-content; margin: 0 auto;">
                                 </td>
                             </form>
-                        </td>
                     </tr>               
                 {% endfor %}
             </tbody>
