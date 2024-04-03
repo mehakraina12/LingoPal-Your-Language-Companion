@@ -42,6 +42,11 @@ urlpatterns = [
     path('verifyEmail' , VerifyOTP , name='verifyEmail'),
     path('take_test/<str:language>' , take_test , name='take_test'),
     path('result_update' , result_update , name='result_update'),
+    path('chatroom' , chatroom , name='room_attempt'),
+    path('<str:room>/' , room , name='room'),
+    path('checkview' , checkview , name='checkview'),
+    path('send' , send , name='send'),
+    path('getMessages/<str:room>/' , getMessages , name='getMessages'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

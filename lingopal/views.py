@@ -15,6 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login
 import requests
 import base64
+from .models import *
 
 language_mapping = {
     1: "Arabic",
@@ -589,4 +590,115 @@ def take_test(request, language):
     quiz_page = quiz_pages.get(language)
 
     return render(request, quiz_page)
+
+def chatroom(request):
+    return render(request,'chatroom.html')
+
+def room(request, room):
+    db = client['lingopal_YLC']  # Replace 'your_database_name' with your actual database name
+    collection = db['users_room']  # Replace 'users_details' with your actual collection name
+
+    # Check if the room exists in the users_details collection
+    room_details = collection.find_one({'name': room})
+
+    if room_details:
+        # If the room exists, render the room.html template
+        username = room_details.get('username')
+        return render(request, 'room.html', {'room': room, 'username': username})
+    return JsonResponse({'data': 'Hello'}, status=200)
+
+def checkview(request):
+    room_name = request.POST['room_name']
+    username = request.POST['username']
+    
+    # Connect to MongoDB
+    collection=db['users_room']
+
+    # Check if the room exists in MongoDB
+    existing_room = collection.find_one({"name": room_name})
+    if existing_room:
+        return redirect(f'/{room_name}/?username={username}')
+    else:
+        # Create the room in MongoDB
+        collection.insert_one({"name": room_name, "username": username})
+        return redirect(f'/{room_name}/?username={username}')
+    
+@csrf_exempt
+
+
+# Assuming you have already defined `client` somewhere in your code
+
+def send(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        message_content = request.POST.get('message')
+
+        try:
+            # Connect to MongoDB
+            db = client['lingopal_YLC']
+
+            # Retrieve room details for the user
+            users_room_collection = db['users_room']
+            room_details = users_room_collection.find_one({'username': username})
+
+            if room_details:
+                # If room details found, use the room name as room_id
+                room_id = room_details.get('name')
+                current_datetime = datetime.now()
+
+                # Retrieve existing messages for the room
+                users_message_collection = db['users_message']
+                existing_messages = users_message_collection.find_one({'room_id': room_id})
+
+                if existing_messages:
+                    # If there are existing messages, append the new message to the list
+                    messages_list = existing_messages.get('messages', [])
+                    messages_list.append({'username': username, 'message': message_content})
+                    # Update the existing document with the new messages list
+                    users_message_collection.update_one({'room_id': room_id}, {'$set': {'messages': messages_list}})
+                    # Use $set instead of $push to update the 'messages' field
+
+                    # print(messages_list)
+                    # print(len(messages_list))
+                else:
+                    # If there are no existing messages, create a new document for the room
+                    users_message_collection.insert_one({
+                        'room_id': room_id,
+                        'messages': [{'username': username, 'message': message_content, 'timestamp': current_datetime}]
+                    })
+
+                client.close()
+
+                return JsonResponse({'status': 'success', 'message': 'Message sent successfully'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'User not found or room details not available'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+    
+def getMessages(request, room):
+    # Connect to MongoDB
+    db = client['lingopal_YLC']
+    
+    # Retrieve room details for the user
+    room_name = request.POST['room_name']
+    
+    # Access the collection
+    collection = db['users_message']
+    
+    # Query messages from the collection based on room name
+    result = collection.find_one({'room_name': room_name})
+    
+    # Extract the messages array from the result
+    if result:
+        messages = result.get('message', [])
+    else:
+        messages = []
+    
+    # Close the connection
+    client.close()
+    
+    return render(request, 'room.html', {'room': room_name, 'messages': messages})
+
 
