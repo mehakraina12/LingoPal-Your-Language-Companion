@@ -10,7 +10,7 @@
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
 
    <!-- custom css file link  -->
-   <link rel="stylesheet" href="static/css/style1.css">
+   <link rel="stylesheet" href="static/css/style5.css">
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 
 </head>
@@ -49,29 +49,6 @@
    </section>
 
 </header>   
-
-<div class="side-bar">
-
-   <div id="close-btn">
-      <i class="fas fa-times"></i>
-   </div>
-
-   <div class="profile">
-      <img src="static/images/pic-1.jpg" class="image" alt="">
-      <h3 class="name">Name</h3>
-      <p class="role">Username</p>
-      <a href="{% url 'profile_attempt'%}" class="btn">view profile</a>
-   </div>
-
-   <nav class="navbar">
-      <a href="{% url 'home_attempt'%}"><i class="fas fa-home"></i><span>Home</span></a>
-      <a href="{% url 'resources_attempt'%}"><i class="fas fa-graduation-cap"></i><span>Resources</span></a>
-      <a href="{% url 'matches_attempt'%}"><i class="fas fa-chalkboard-user"></i><span>Matches</span></a>
-      <a href="{% url 'feedback_attempt'%}"><i class="fas fa-headset"></i><span>Support/Contact us</span></a>
-      <a href="{% url 'settings_attempt'%}"><i class="fas fa-gear"></i><span>Settings</span></a>
-   </nav>
-
-</div>
 
 <section class="form-container">
    <form action="" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">

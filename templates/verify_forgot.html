@@ -1,19 +1,17 @@
-
-{% block content %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>login</title>
+   <title>register</title>
 
    <!-- font awesome cdn link  -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
 
    <!-- custom css file link  -->
    <link rel="stylesheet" href="static/css/style5.css">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 
 </head>
 <body>
@@ -22,7 +20,8 @@
    
    <section class="flex">
 
-      <a href="{% url 'index'%}" class="logo"><img src="static/images/logo.png" width="250" height="70" alt="LingoPal Logo"></a>
+    <a href="{% url 'index'%}" class="logo"><img src="static/images/logo.png" width="250" height="70" alt="LingoPal Logo"></a>
+
 
       <form action="search.html" method="post" class="search-form">
          <input type="text" name="search_box" required placeholder="search courses..." maxlength="100">
@@ -42,7 +41,7 @@
          <p class="role">Username</p>
          <a href="{% url 'profile_attempt'%}" class="btn">view profile</a>
          <div class="flex-btn">
-            <a href="{% url 'login_attempt'%}" class="option-btn">login</a>
+            <a href="{% url 'logout_attempt'%}" class="option-btn">Logout</a>
             <a href="{% url 'register_attempt'%}" class="option-btn">register</a>
          </div>
       </div>
@@ -51,35 +50,46 @@
 
 </header>   
 
-
 <section class="form-container">
-
-   <form action="" method="post" enctype="multipart/form-data">
-      {%  csrf_token %}
-      
-      {% if messages %}
-         <ul class="messages">
-            {% for message in messages %}
-               <li style="color: red; font-size: 15px;" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-         </ul>
-      {% endif %}
-
-      <div id="settings" class="settings-container">
-         <h3 style="color: white;">Login</h3>
-      </div>
-      <p>Enter your email <span>*</span></p>
-      <input type="email" name="email" placeholder="Enter your email" required maxlength="50" class="box">
-      <p>Enter your password <span>*</span></p>
-      <input type="password" name="password" placeholder="enter your password" required maxlength="20" class="box">
-      <p><a href="{% url 'forgot_password'%}" style="color: red;">Forgot your password?</a></p>
-      <input type="submit" value="login now" name="submit" class="btn">
-      <p>Don't have an account? <a href="{% url 'register_attempt'%}"><span fontcolor="red">Register</span></a></p>
-      
+   <form action="" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+      {% csrf_token %}
+      <h3>Verify your email</h3>
+      <p>Enter your OTP recieved on your email <span>*</span></p>
+      <input type="text" name="name" id="otp" placeholder="Enter OTP" required maxlength="50" class="box">
+      <input type="submit" value="Verify" name="submit" class="btn">
    </form>
-
-   
 </section>
+
+<script>
+   let attempts = 0;
+   $('#otp').change(function(){
+      let otp = $('#otp').val();
+      console.log("OTP: ",otp)
+
+      if (otp == '{{otp}}'){
+         console.log("OTP Matched")
+
+         $.ajax({
+            type: "POST",
+            url: '{% url "verifyForgot" %}',
+            data: {'otp': otp},
+            success: function(data){
+               console.log("OTP SDFG")
+               window.location.href = "success_forgot";
+            }
+         })
+      }
+      else {
+         attempts++;
+         if (attempts >= 3) {
+            alert("You have exceeded the maximum number of attempts. Redirecting to register page.");
+            window.location.href = "register"; // Redirect to register page
+         } else {
+            alert("Incorrect OTP. Please try again. Attempts left: " + (3 - attempts));
+         }
+      }
+   })
+</script>
 
 
 
@@ -89,5 +99,3 @@
    
 </body>
 </html>
-{% endblock %}
-

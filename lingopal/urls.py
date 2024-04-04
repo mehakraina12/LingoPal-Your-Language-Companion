@@ -40,6 +40,7 @@ urlpatterns = [
     path('playlist' , playlist_attempt , name='playlist_attempt'),
     path('verify' , verify_attempt , name='verify_attempt'),
     path('verifyEmail' , VerifyOTP , name='verifyEmail'),
+    path('verifyForgot' , VerifyForgot , name='verifyForgot'),
     path('take_test/<str:language>' , take_test , name='take_test'),
     path('result_update' , result_update , name='result_update'),
     path('chatroom' , chatroom , name='room_attempt'),
@@ -50,6 +51,10 @@ urlpatterns = [
     path('dashboard' , dashboard , name='dashboard'),
     path('meeting' , videocall , name='meeting'),
     path('join' , join_room , name='join'),
+    path('forgot_password' , forgot_password , name='forgot_password'),
+    path('verify_forgot' , verify_forgot , name='verify_forgot'),
+    path('update_password' , update_password , name='update_password'),
+    path('success_forgot' , success_forgot , name='success_forgot'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
