@@ -47,6 +47,9 @@ urlpatterns = [
     path('checkview' , checkview , name='checkview'),
     path('send' , send , name='send'),
     path('getMessages/<str:room>/' , getMessages , name='getMessages'),
+    path('dashboard' , dashboard , name='dashboard'),
+    path('meeting' , videocall , name='meeting'),
+    path('join' , join_room , name='join'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
