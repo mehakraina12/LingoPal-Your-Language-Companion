@@ -155,12 +155,16 @@ def update_profile(request):
                 # Retrieve form data
                 language_to_learn = request.POST.get('language_to_learn')
                 about_me = request.POST.get('about_me')
+                password=request.POST.get('password1')
 
                 # Update the user's profile data in the database if the fields are provided
                 if language_to_learn:
                     user_data['language_to_learn'] = language_to_learn
                 if about_me:
                     user_data['about_me'] = about_me
+                if password:
+                    hashed_password=make_password(password)
+                    user_data['password']=hashed_password
 
                 profile_pic = request.FILES.get('profile_pic')
                 if profile_pic:
@@ -172,6 +176,7 @@ def update_profile(request):
                         return redirect('update_profile')
 
                 # Save the updated user data
+                print(user_data)
                 collection.update_one({'username': username}, {"$set": user_data})
                 return redirect('profile_attempt')
 
@@ -198,6 +203,8 @@ def index(request):
     return render(request , 'index.html')
 def success(request):
     return render(request , 'success.html')
+def success_forgot(request):
+    return render(request , 'success_forgot.html')
 def token_send(request):
     return render(request , 'token_send.html')
 def success_attempt(request):
@@ -757,3 +764,74 @@ def join_room(request):
         roomID=request.POST['roomID']
         return redirect("/meeting?roomID="+roomID)
     return render(request,'joinroom.html')
+
+def verify_forgot(request):
+    return render(request , 'verify_forgot.html')
+
+@csrf_exempt
+def VerifyForgot(request):
+    print("Hello")
+    if request.method == "POST":
+        email = request.session.get('email')  # Retrieve email from session
+        if email:
+            # Clear session data after successful insertion
+            return JsonResponse({'data': 'Email verification successful'}, status=200)
+        else:
+            return JsonResponse({'error': 'Email not found in session'}, status=400)
+
+def forgot_password(request):
+    if request.method == 'POST':
+        # Retrieve form data
+        email = request.POST.get('email')
+        request.session['email'] = email
+        db = client['lingopal_YLC']
+        collection = db['users_details']
+        user_data = collection.find_one({'email': email})
+        if user_data:
+            request.session['email'] = email  # Store email in session
+            print("This is forgot password email: ",email)
+            # Generate and send verification email
+            otp = random.randint(100000, 999999)
+            send_mail("User Data: ", f"Verify your mail by the OTP: \n {otp}", EMAIL_HOST_USER, [email], fail_silently=True)
+            return render(request, 'verify_forgot.html', {'otp': otp})
+        else:
+            return render(request, 'forgot_password.html', {'error': 'Email not found'})
+    else:
+        return render(request, 'forgot_password.html')
+
+def update_password(request):
+    context = {}  # Define context here with an empty dictionary
+    if request.method == 'POST':
+        print("hello")
+        email = request.session.get('email')  # Retrieve email from session
+        print(email)  # Check if email is retrieved properly
+        if email:
+            collection = db['users_details']
+            user_data = collection.find_one({'email': email})
+
+            if user_data:
+                # Retrieve form data
+                password = request.POST.get('password1')
+                if password:
+                    hashed_password = make_password(password)
+                    # Update the password in user data
+                    user_data['password'] = hashed_password
+                    # Save the updated user data
+                    collection.update_one({'email': email}, {"$set": user_data})
+                    print(email)  # Check if email is retained after password update
+                    print(password)  # Check if password is retrieved properly
+                    return redirect('login_attempt')
+
+    # If the request method is not POST or if there's an error, render the update password page
+    email = request.session.get('email')
+    print(email)  # Check if email is retrieved properly
+    if email:
+        collection = db['users_details']
+        user_data = collection.find_one({'email': email})
+
+        if user_data:
+            # You can add other necessary data retrieval here if needed
+            pass  # Placeholder, no additional data retrieval for now
+
+    return render(request, 'update_password.html', context)
+
