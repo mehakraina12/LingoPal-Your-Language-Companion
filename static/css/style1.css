@@ -245,7 +245,7 @@ section{
    height: 10rem;
    width: 10rem;
    border-radius: 50%;
-   object-fit: contain;
+   object-fit: cover;
    margin-bottom: 1rem;
 }
 
@@ -308,7 +308,7 @@ section{
    height: 10rem;
    width: 10rem;
    border-radius: 50%;
-   object-fit: contain;
+   object-fit: cover;
    margin-bottom: 1rem;
 }
 
@@ -957,7 +957,7 @@ section{
    grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
    gap:1.5rem;
    justify-content: center;
-   align-items: flex-start;
+   align-items:stretch;
 }
 
 .teachers .box-container .box{

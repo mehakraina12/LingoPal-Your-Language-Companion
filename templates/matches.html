@@ -58,7 +58,7 @@
       <img src="{{profile_pic_path}}" class="image" alt="Profile Picture">
       <h3 class="name">{{name}}</h3>
       <p class="role">{{username}}</p>
-      <a href="profile.html" class="btn">view profile</a>
+      <a href="{% url 'profile_attempt'%}" class="btn">view profile</a>
    </div>
 
    <nav class="navbar">
@@ -84,25 +84,49 @@
 
       
 
+      {% for matched_data in matched_usernames %}
       <div class="box">
          <div class="tutor">
-            <img src="static/images/pic-2.png" alt="">
+            <img src="{{ matched_data.5 }}" alt="">
             <div>
-               <h3>jack</h3>
-               <span>email</span>
+                  <h3>{{ matched_data.0 }}</h3> <!-- Display the name here -->
+                  <span>{{ matched_data.1 }}</span> <!-- Display the email here -->
             </div>
          </div>
-         <p>languages known : <span>4</span></p>
-         <p>languages to be learnt : <span>18</span></p>
-         <p>proficiency in the languages : <span>1208</span></p>
+         {% if matched_data.2 %}
+    <p>languages known : 
+        <span>
+            {% for language_known in matched_data.2 %}
+                {{ language_known }}
+                {% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </span>
+    </p>
+    {% endif %}
+         <p>
+            {% if matched_data.3 %}
+            languages to be learnt : 
+            <span>{{ matched_data.3 }}</span>
+            {% endif %}
+         </p>
+         <p>
+            {% if matched_data.4 %}
+            languages to teach : 
+            <span>{{ matched_data.4 }}</span>
+            {% endif %}
+         </p>
+         
          <a href="{% url 'teacher_profile_attempt'%}" class="inline-btn">view profile</a>
       </div>
+      {% endfor %}
 
-      <div class="box">
+      
+
+      <!-- <div class="box">
          <div class="tutor">
             <img src="static/images/pic-3.png" alt="">
             <div>
-               <h3>jack</h3>
+               <h3>name</h3>
                <span>email</span>
             </div>
          </div>
@@ -116,7 +140,7 @@
          <div class="tutor">
             <img src="static/images/pic-4.png" alt="">
             <div>
-               <h3>jack</h3>
+               <h3>name</h3>
                <span>email</span>
             </div>
          </div>
@@ -129,7 +153,7 @@
          <div class="tutor">
             <img src="static/images/pic-5.png" alt="">
             <div>
-               <h3>jack</h3>
+               <h3>name</h3>
                <span>email</span>
             </div>
          </div>
@@ -143,7 +167,7 @@
          <div class="tutor">
             <img src="static/images/pic-6.jpg" alt="">
             <div>
-               <h3>jack</h3>
+               <h3>name</h3>
                <span>email</span>
             </div>
          </div>
@@ -157,7 +181,7 @@
          <div class="tutor">
             <img src="static/images/pic-7.jpg" alt="">
             <div>
-               <h3>jack</h3>
+               <h3>name</h3>
                <span>email</span>
             </div>
          </div>
@@ -166,7 +190,7 @@
          <p>proficiency in the languages : <span>1208</span></p>
          <a href="{% url 'teacher_profile_attempt'%}" class="inline-btn">view profile</a>
       </div>
-   </div>
+   </div> -->
 
 </section>
 
