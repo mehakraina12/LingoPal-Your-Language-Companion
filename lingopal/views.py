@@ -257,7 +257,6 @@ def matches_attempt(request):
 
     if username:
         # Connect to MongoDB  # Replace with your MongoDB connection details
-        db = client['lingopal_YLC']
         collection = db['users_details']
         experts_collection = db['users_experts']
         
