@@ -300,7 +300,8 @@ def matches_attempt(request):
                     [],  # Placeholder for "languages known" for experts
                     None,  # Placeholder for "languages to learn" for experts
                     expert.get('language_to_teach'),  # "Languages to teach" for experts
-                    None
+                    expert.get('profile_pic_path')
+                    
                 ) 
                 for expert in matched_experts
             ]
