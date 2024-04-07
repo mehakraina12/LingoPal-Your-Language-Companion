@@ -115,6 +115,9 @@ def register_attempt(request):
         return render(request,'verify.html', {'otp': otp})
     else:
         return render(request, 'register.html')
+    
+
+
 
 def login_attempt(request):
     collection = db['users_details']
@@ -253,20 +256,70 @@ def matches_attempt(request):
     username = request.session.get('username')
 
     if username:
+        # Connect to MongoDB  # Replace with your MongoDB connection details
+        db = client['lingopal_YLC']
         collection = db['users_details']
+        experts_collection = db['users_experts']
+        
+
+        # Find the current user's data
         user_data = collection.find_one({'username': username})
+        name = user_data.get('name')
+        profile_pic_path = user_data.get('profile_pic_path')
+
 
         if user_data:
-            name = user_data.get('name')
-            profile_pic_path = user_data.get('profile_pic_path')
+            # Get the language number the current user wants to learn
+            language_number_to_learn_str = user_data.get('language_to_learn')
+            language_number_to_learn = int(language_number_to_learn_str)
+
+            # Map language number to language name
+            language_to_learn = language_mapping.get(language_number_to_learn)
+
+            # Find users whose native languages intersect with the language the current user wants to learn
+            matched_users = collection.find({'native_languages': language_to_learn})
+            matched_experts = experts_collection.find({'language_to_teach': language_to_learn})
+            print(language_to_learn)
+            # Extract usernames, names, and emails from matched users
+            matched_user_data = [
+                (
+                    user.get('name'), 
+                    user.get('email'), 
+                    user.get('native_languages'), 
+                    language_mapping.get(int(user.get('language_to_learn')), 'Unknown'),
+                    None,  # Placeholder for "languages to teach" for users
+                    user.get('profile_pic_path')
+                ) 
+                for user in matched_users
+            ]
+
+            matched_expert_data = [
+                (
+                    expert.get('name'), 
+                    expert.get('email'), 
+                    [],  # Placeholder for "languages known" for experts
+                    None,  # Placeholder for "languages to learn" for experts
+                    expert.get('language_to_teach'),  # "Languages to teach" for experts
+                    None
+                ) 
+                for expert in matched_experts
+            ]
+
+            # Combine the data from both matched users and experts
+            all_matched_data = matched_user_data + matched_expert_data
+            print("All matched data:", all_matched_data)
 
             context = {
+                'matched_usernames': all_matched_data,
                 'username': username,
                 'name': name,
-                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+                'profile_pic_path': profile_pic_path
             }
 
-    return render(request , 'matches.html',context)
+            return render(request, 'matches.html', context)
+    # Handle the case where the user is not logged in or doesn't have details
+    return render(request, 'matches.html', {})
+
 
 def profile_attempt(request):
     username = request.session.get('username')
