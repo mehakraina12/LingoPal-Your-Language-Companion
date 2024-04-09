@@ -687,6 +687,7 @@ def send(request):
         room_details = users_room_collection.find_one({'username': username})
 
         if room_details:
+            print(message_content)
             # If room details found, use the room name as room_id
             room_name = room_details.get('name')
             current_datetime = datetime.now()

@@ -70,8 +70,6 @@ body {
 <script>
   $(document).ready(function(){
     setInterval(function(){
-        // Get the CSRF token from the cookie
-        var csrftoken = getCookie('csrftoken');
         
         $.ajax({
             type: 'GET',
@@ -97,28 +95,7 @@ body {
     }, 1000);
   });
 
-
-  // Function to get CSRF token from cookies
-  function getCookie(name) {
-      var cookieValue = null;
-      if (document.cookie && document.cookie !== '') {
-          var cookies = document.cookie.split(';');
-          for (var i = 0; i < cookies.length; i++) {
-              var cookie = jQuery.trim(cookies[i]);
-              // Check if this cookie contains the CSRF token
-              if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                  break;
-              }
-          }
-      }
-      return cookieValue;
-}
-
-  </script>
-  
-
-
+</script>
 
 <div class="container">
     <style>
