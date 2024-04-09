@@ -658,15 +658,16 @@ def room(request, room):
 
     if room_details:
         # If the room exists, render the room.html template
-        username = room_details.get('username')
-        return render(request, 'room.html', {'room': room, 'username': username})
+        return render(request, 'room.html', {'room': room})
     return JsonResponse({'data': 'Hello'}, status=200)
 
 def checkview(request):
     if request.method == 'POST':
         room_name = request.POST.get('room_name')  # Retrieve email from POST data
-        username = request.POST.get('username')
-    
+        request.session['room_name'] = room_name
+
+    username = request.session.get('username')
+       
     collection=db['users_room']
 
     # Check if the room exists in MongoDB
@@ -675,22 +676,17 @@ def checkview(request):
         return redirect(f'/{room_name}/?username={username}')
     else:
         # Create the room in MongoDB
-        collection.insert_one({"name": room_name, "username": username})
+        collection.insert_one({"name": room_name})
         return redirect(f'/{room_name}/?username={username}')
     
 def send(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        message_content = request.POST.get('message')
-        # print(message_content)
-        users_room_collection = db['users_room']
-        room_details = users_room_collection.find_one({'username': username})
+        # Retrieve room_name and username from session
+        room_name = request.session.get('room_name')
+        username = request.session.get('username')
 
-        if room_details:
-            print(message_content)
-            # If room details found, use the room name as room_id
-            room_name = room_details.get('name')
-            current_datetime = datetime.now()
+        if room_name and username:
+            message_content = request.POST.get('message')
 
             # Retrieve existing messages for the room
             users_message_collection = db['users_message']
@@ -699,27 +695,25 @@ def send(request):
             if existing_messages:
                 # If there are existing messages, append the new message to the list
                 messages_list = existing_messages.get('messages', [])
+                current_datetime = datetime.now()
                 messages_list.append({'username': username, 'message': message_content, 'timestamp': current_datetime})
                 # Update the existing document with the new messages list
                 users_message_collection.update_one({'room_name': room_name}, {'$set': {'messages': messages_list}})
             else:
                 # If there are no existing messages, create a new document for the room
-                
+                current_datetime = datetime.now()
                 users_message_collection.insert_one({
                     'room_name': room_name,
                     'messages': [{'username': username, 'message': message_content, 'timestamp': current_datetime}]
                 })
 
-            client.close()
-
             return JsonResponse({'status': 'success', 'message': 'Message sent successfully'})
         else:
-            return JsonResponse({'status': 'error', 'message': 'User not found or room details not available'})
-        
+            return JsonResponse({'status': 'error', 'message': 'Room name or username not found in session'})
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
     
-def getMessages(request, room):  
+def getMessages(room):  
     collection = db['users_message']
     result = collection.find_one({'room_name': room})  # Use the 'room' parameter directly
     # print(room)
@@ -727,9 +721,9 @@ def getMessages(request, room):
     if result:
         messages = result.get('messages', [])
     else:
-        messages = []
-    
+        messages = []   
     return JsonResponse({"messages": messages})
+
 
 
 
@@ -854,4 +848,3 @@ def update_password(request):
             pass  # Placeholder, no additional data retrieval for now
 
     return render(request, 'update_password.html', context)
-
