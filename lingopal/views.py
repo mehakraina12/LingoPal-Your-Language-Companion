@@ -326,7 +326,7 @@ def profile_attempt(request):
         user_data = collection.find_one({'username': username})
 
         if user_data:
-            name = user_data.get('name')
+            name = user_data.get('name') 
             profile_pic_path = user_data.get('profile_pic_path')
             about_me = user_data.get('about_me')
             language_to_learn = user_data.get('language_to_learn')
@@ -651,7 +651,6 @@ def chatroom(request):
     return render(request,'chatroom.html')
 
 def room(request, room):
-    db = client['lingopal_YLC']  # Replace 'your_database_name' with your actual database name
     collection = db['users_room']  # Replace 'users_details' with your actual collection name
 
     # Check if the room exists in the users_details collection
@@ -664,14 +663,14 @@ def room(request, room):
     return JsonResponse({'data': 'Hello'}, status=200)
 
 def checkview(request):
-    room_name = request.POST['room_name']
-    username = request.POST['username']
+    if request.method == 'POST':
+        room_name = request.POST.get('room_name')  # Retrieve email from POST data
+        username = request.POST.get('username')
     
-    # Connect to MongoDB
     collection=db['users_room']
 
     # Check if the room exists in MongoDB
-    existing_room = collection.find_one({"name": room_name})
+    existing_room = collection.find_one({'name': room_name})
     if existing_room:
         return redirect(f'/{room_name}/?username={username}')
     else:
@@ -679,90 +678,60 @@ def checkview(request):
         collection.insert_one({"name": room_name, "username": username})
         return redirect(f'/{room_name}/?username={username}')
     
-@csrf_exempt
-
-
-# Assuming you have already defined `client` somewhere in your code
-
 def send(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         message_content = request.POST.get('message')
+        print(message_content)
+        users_room_collection = db['users_room']
+        room_details = users_room_collection.find_one({'username': username})
 
-        try:
-            # Connect to MongoDB
-            db = client['lingopal_YLC']
+        if room_details:
+            # If room details found, use the room name as room_id
+            room_name = room_details.get('name')
+            current_datetime = datetime.now()
 
-            # Retrieve room details for the user
-            users_room_collection = db['users_room']
-            room_details = users_room_collection.find_one({'username': username})
+            # Retrieve existing messages for the room
+            users_message_collection = db['users_message']
+            existing_messages = users_message_collection.find_one({'room_name': room_name})
 
-            if room_details:
-                # If room details found, use the room name as room_id
-                room_id = room_details.get('name')
-                current_datetime = datetime.now()
-
-                # Retrieve existing messages for the room
-                users_message_collection = db['users_message']
-                existing_messages = users_message_collection.find_one({'room_id': room_id})
-
-                if existing_messages:
-                    # If there are existing messages, append the new message to the list
-                    messages_list = existing_messages.get('messages', [])
-                    messages_list.append({'username': username, 'message': message_content})
-                    # Update the existing document with the new messages list
-                    users_message_collection.update_one({'room_id': room_id}, {'$set': {'messages': messages_list}})
-                    # Use $set instead of $push to update the 'messages' field
-
-                    # print(messages_list)
-                    # print(len(messages_list))
-                else:
-                    # If there are no existing messages, create a new document for the room
-                    users_message_collection.insert_one({
-                        'room_id': room_id,
-                        'messages': [{'username': username, 'message': message_content, 'timestamp': current_datetime}]
-                    })
-
-                client.close()
-
-                return JsonResponse({'status': 'success', 'message': 'Message sent successfully'})
+            if existing_messages:
+                # If there are existing messages, append the new message to the list
+                messages_list = existing_messages.get('messages', [])
+                messages_list.append({'username': username, 'message': message_content, 'timestamp': current_datetime})
+                # Update the existing document with the new messages list
+                users_message_collection.update_one({'room_name': room_name}, {'$set': {'messages': messages_list}})
             else:
-                return JsonResponse({'status': 'error', 'message': 'User not found or room details not available'})
-        except Exception as e:
-            return JsonResponse({'status': 'error', 'message': str(e)})
+                # If there are no existing messages, create a new document for the room
+                
+                users_message_collection.insert_one({
+                    'room_name': room_name,
+                    'messages': [{'username': username, 'message': message_content, 'timestamp': current_datetime}]
+                })
+
+            client.close()
+
+            return JsonResponse({'status': 'success', 'message': 'Message sent successfully'})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'User not found or room details not available'})
+        
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
     
-def getMessages(request, room):
-    # Connect to MongoDB
-    db = client['lingopal_YLC']
-    
-    # Retrieve room details for the user
-    room_name = request.POST['room_name']
-    
-    # Access the collection
+def getMessages(request, room):  
     collection = db['users_message']
+    result = collection.find_one({'room_name': room})  # Use the 'room' parameter directly
     
-    # Query messages from the collection based on room name
-    result = collection.find_one({'room_name': room_name})
-    
-    # Extract the messages array from the result
     if result:
         messages = result.get('messages', [])
     else:
         messages = []
     
-    # Close the connection
-    client.close()
-    
-    return render(request, 'room.html', {'room': room_name, 'messages': messages})
+    return JsonResponse({"messages": messages})
+
 
 
 def dashboard(request):
-    # Connect to MongoDB
-    
-    # Select the database
-    db =client['lingopal_YLC']
     
     # Select the collection
     collection = db['users_details']

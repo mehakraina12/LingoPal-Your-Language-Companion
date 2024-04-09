@@ -67,8 +67,7 @@ body {
 </div> -->
 
 </div>
-
-<!-- <script>
+<script>
   $(document).ready(function(){
     setInterval(function(){
         // Get the CSRF token from the cookie
@@ -83,40 +82,40 @@ body {
                 console.log(response);
                 $("#display").empty();
                 // Assuming response is in the format { messages: [...] }
-                for (var key in response.messages) {
-                    var message = response.messages[key];
-                    var user = message.user;
-                    var value = message.value;
-                    var date = message.date;
-                    var temp = "<div class='container darker'><b>" + user + "</b><p>" + value + "</p><span class='time-left'>" + date + "</span></div>";
+                response.messages.forEach(function(message) {
+                    var username = message.username;
+                    var messageContent = message.message;
+                    var timestamp = message.timestamp;
+                    var temp = "<div class='container darker'><b>" + username + "</b><p>" + messageContent + "</p><span class='time-left'>" + timestamp + "</span></div>";
                     $("#display").append(temp);
-                }
+                });
             },
             error: function(response){
                 alert('An error occurred');
             }
         });
     }, 1000);
-});
+  });
 
-// Function to get CSRF token from cookies
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Check if this cookie contains the CSRF token
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
+
+  // Function to get CSRF token from cookies
+  function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+              var cookie = jQuery.trim(cookies[i]);
+              // Check if this cookie contains the CSRF token
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
 }
 
-  </script> -->
+  </script>
   
 
 
@@ -158,7 +157,6 @@ function getCookie(name) {
     <form id="post-form">
         {% csrf_token %}
         <input type="hidden" name="username" id="username" value="{{username}}"/>
-        <input type="hidden" name="room_id" id="room_id" value="{{room_details.id}}"/>
         <input type="text" name="message" id="message" width="100px" />
         <input type="submit" value="Send">
     </form>
