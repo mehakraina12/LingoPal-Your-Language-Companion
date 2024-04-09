@@ -69,8 +69,9 @@ body {
 </div>
 <script>
   $(document).ready(function(){
-    setInterval(function(){
-      var csrftoken = getCookie('csrftoken');
+        // Get the CSRF token from the cookie
+        var csrftoken = getCookie('csrftoken');
+        
         $.ajax({
             type: 'GET',
             url: "/getMessages/{{room}}/",
@@ -89,38 +90,14 @@ body {
                     $("#display").append(temp);
                 });
             },
-<<<<<<< HEAD
-            
-=======
             error: function(response){
                 // alert('An error occurred');
                 console.log(response)
             }
->>>>>>> 250af686c12d6962445861dd97a3a77684c2c3bc
         });
-    }, 1000);
   });
 
 
-<<<<<<< HEAD
-
-
-// Function to get CSRF token from cookies
-function getCookie(name) {
-  var cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-      var cookies = document.cookie.split(';');
-      for (var i = 0; i < cookies.length; i++) {
-          var cookie = jQuery.trim(cookies[i]);
-          // Check if this cookie contains the CSRF token
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-          }
-      }
-  }
-  return cookieValue;
-=======
   // Function to get CSRF token from cookies
   function getCookie(name) {
       var cookieValue = null;
@@ -136,11 +113,11 @@ function getCookie(name) {
           }
       }
       return cookieValue;
->>>>>>> 250af686c12d6962445861dd97a3a77684c2c3bc
 }
 
   </script>
   
+
 
 
 <div class="container">
