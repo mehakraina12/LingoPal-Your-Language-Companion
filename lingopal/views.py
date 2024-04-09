@@ -667,7 +667,7 @@ def checkview(request):
         request.session['room_name'] = room_name
 
     username = request.session.get('username')
-       
+
     collection=db['users_room']
 
     # Check if the room exists in MongoDB
@@ -713,10 +713,11 @@ def send(request):
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
     
-def getMessages(request,room):  
+def getMessages(room):  
     collection = db['users_message']
-    result = collection.find_one({'room_name': room})  # Use the 'room' parameter directly
-    
+
+    room_name = request.session.get('room_name')
+    result = collection.find_one({'room_name': room_name})  # Use the 'room' parameter directly
     # print(room)
     # print(result)
     if result:
@@ -724,9 +725,7 @@ def getMessages(request,room):
     else:
         messages = []   
     return JsonResponse({"messages": messages})
-
-
-
+3
 
 def dashboard(request):
     
@@ -849,3 +848,4 @@ def update_password(request):
             pass  # Placeholder, no additional data retrieval for now
 
     return render(request, 'update_password.html', context)
+
