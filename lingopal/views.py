@@ -667,7 +667,7 @@ def checkview(request):
         request.session['room_name'] = room_name
 
     username = request.session.get('username')
-
+       
     collection=db['users_room']
 
     # Check if the room exists in MongoDB
@@ -715,14 +715,8 @@ def send(request):
     
 def getMessages(request,room):  
     collection = db['users_message']
-<<<<<<< HEAD
-
-    room_name = request.session.get('room_name')
-    result = collection.find_one({'room_name': room_name})  # Use the 'room' parameter directly
-=======
     result = collection.find_one({'room_name': room})  # Use the 'room' parameter directly
     
->>>>>>> eef82d2c2460c9ad954d1a641a1176134f85e2ff
     # print(room)
     # print(result)
     if result:
