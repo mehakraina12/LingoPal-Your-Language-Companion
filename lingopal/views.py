@@ -682,7 +682,7 @@ def send(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         message_content = request.POST.get('message')
-        print(message_content)
+        # print(message_content)
         users_room_collection = db['users_room']
         room_details = users_room_collection.find_one({'username': username})
 
@@ -721,7 +721,8 @@ def send(request):
 def getMessages(request, room):  
     collection = db['users_message']
     result = collection.find_one({'room_name': room})  # Use the 'room' parameter directly
-    
+    # print(room)
+    # print(result)
     if result:
         messages = result.get('messages', [])
     else:
