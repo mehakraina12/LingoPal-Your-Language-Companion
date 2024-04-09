@@ -259,13 +259,11 @@ def matches_attempt(request):
         # Connect to MongoDB  # Replace with your MongoDB connection details
         collection = db['users_details']
         experts_collection = db['users_experts']
-        
 
         # Find the current user's data
         user_data = collection.find_one({'username': username})
         name = user_data.get('name')
         profile_pic_path = user_data.get('profile_pic_path')
-
 
         if user_data:
             # Get the language number the current user wants to learn
@@ -277,9 +275,6 @@ def matches_attempt(request):
 
             # Find users whose native languages intersect with the language the current user wants to learn
             matched_users = collection.find({'native_languages': language_to_learn})
-            matched_experts = experts_collection.find({'language_to_teach': language_to_learn})
-            print(language_to_learn)
-            # Extract usernames, names, and emails from matched users
             matched_user_data = [
                 (
                     user.get('name'), 
@@ -292,22 +287,22 @@ def matches_attempt(request):
                 for user in matched_users
             ]
 
-            matched_expert_data = [
-                (
-                    expert.get('name'), 
-                    expert.get('email'), 
-                    [],  # Placeholder for "languages known" for experts
-                    None,  # Placeholder for "languages to learn" for experts
-                    expert.get('language_to_teach'),  # "Languages to teach" for experts
-                    expert.get('profile_pic_path')
-                    
-                ) 
-                for expert in matched_experts
-            ]
-
-            # Combine the data from both matched users and experts
-            all_matched_data = matched_user_data + matched_expert_data
-            print("All matched data:", all_matched_data)
+            if not matched_user_data:  # If no matched users found, fetch data from experts
+                matched_experts = experts_collection.find({'language_to_teach': language_to_learn})
+                matched_expert_data = [
+                    (
+                        expert.get('name'), 
+                        expert.get('email'), 
+                        [],  # Placeholder for "languages known" for experts
+                        None,  # Placeholder for "languages to learn" for experts
+                        expert.get('language_to_teach'),  # "Languages to teach" for experts
+                        expert.get('profile_pic_path')
+                    ) 
+                    for expert in matched_experts
+                ]
+                all_matched_data = matched_expert_data
+            else:
+                all_matched_data = matched_user_data
 
             context = {
                 'matched_usernames': all_matched_data,
@@ -319,6 +314,7 @@ def matches_attempt(request):
             return render(request, 'matches.html', context)
     # Handle the case where the user is not logged in or doesn't have details
     return render(request, 'matches.html', {})
+
 
 
 def profile_attempt(request):
@@ -752,7 +748,7 @@ def getMessages(request, room):
     
     # Extract the messages array from the result
     if result:
-        messages = result.get('message', [])
+        messages = result.get('messages', [])
     else:
         messages = []
     
