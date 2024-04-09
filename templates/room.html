@@ -69,10 +69,7 @@ body {
 </div>
 <script>
   $(document).ready(function(){
-<<<<<<< HEAD
     setInterval(function(){
-=======
->>>>>>> a186d9e4146335579dc97d0e6a7e7965f76caa30
         // Get the CSRF token from the cookie
         var csrftoken = getCookie('csrftoken');
         
@@ -83,7 +80,6 @@ body {
             data: { room_name: "{{ room }}" },  // Include room name in the request data
             success: function(response){
                 console.log(response);
-                console.log("mehak");
                 $("#display").empty();
                 // Assuming response is in the format { messages: [...] }
                 response.messages.forEach(function(message) {
@@ -99,6 +95,7 @@ body {
                 console.log(response)
             }
         });
+    }, 1000);
   });
 
 

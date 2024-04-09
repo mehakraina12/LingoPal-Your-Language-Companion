@@ -713,9 +713,10 @@ def send(request):
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
     
-def getMessages(room):  
+def getMessages(request,room):  
     collection = db['users_message']
     result = collection.find_one({'room_name': room})  # Use the 'room' parameter directly
+    
     # print(room)
     # print(result)
     if result:
