@@ -655,17 +655,36 @@ def take_test(request, language):
     return render(request, quiz_page)
 
 def chatroom(request):
-    return render(request,'chatroom.html')
+    username = request.session.get('username')
+    collection = db['users_details']
+    user_data = collection.find_one({'username': username})
+    if user_data:
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+    return render(request,'chatroom.html',context)
 
 def room(request, room):
     collection = db['users_room']  # Replace 'users_details' with your actual collection name
-
-    # Check if the room exists in the users_details collection
+    collection2 = db['users_details']
+    username = request.session.get('username')
+    user_data = collection2.find_one({'username': username})
     room_details = collection.find_one({'name': room})
+    if user_data:
+            profile_pic_path = user_data.get('profile_pic_path')
 
+            context = {
+                'username': username,
+                'room': room,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+    # Check if the room exists in the users_details collection
     if room_details:
         # If the room exists, render the room.html template
-        return render(request, 'room.html', {'room': room})
+        return render(request, 'room.html',context)
     return JsonResponse({'data': 'Hello'}, status=200)
 
 def checkview(request):
