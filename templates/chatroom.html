@@ -1,21 +1,21 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>home</title> -->
+   <title>home</title>
 
    <!-- font awesome cdn link  -->
-   <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"> -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
 
    <!-- custom css file link  -->
-   <!-- <link rel="stylesheet" href="static/css/style1.css"> -->
+   <link rel="stylesheet" href="static/css/style7.css">
 
-<!-- </head>
-<body> -->
+</head>
+<body>
 
-<!-- <header class="header">
+<header class="header">
    
    <section class="flex">
 
@@ -43,6 +43,8 @@
              <a href="{% url 'register_attempt' %}" class="option-btn">Register</a>
          </div>
      </div>
+     
+
    </section>
 
 </header>   
@@ -68,111 +70,24 @@
       <a href="{% url 'settings_attempt'%}"><i class="fas fa-gear"></i><span>Settings</span></a>
    </nav>
 
-</div> -->
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
+</div>
 
-.container {
-  border: 2px solid #dedede;
-  background-color: #f1f1f1;
-  border-radius: 5px;
-  padding: 10px;
-  margin: 10px 0;
-  margin-left:auto;
-  margin-right: auto;
-  text-align: center;
-  width: 50%;
-}
 
-.darker {
-  border-color: #ccc;
-  background-color: #ddd;
-}
-
-.container::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-
-.container img {
-  float: left;
-  max-width: 60px;
-  width: 100%;
-  margin-right: 20px;
-  border-radius: 50%;
-}
-
-.container img.right {
-  float: right;
-  margin-left: 20px;
-  margin-right:0;
-}
-
-.time-right {
-  float: right;
-  color: #aaa;
-}
-
-.time-left {
-  float: left;
-  color: #999;
-}
-</style>
 </head>
 <body>
 
-<div align="center">
-    <h2>Django Chat</h2>
-</div>
 
+<section class="form-container">
+   <form id="post-form" method="POST" action="checkview">
+      {% csrf_token %}
+      <h3>Chatroom</h3>
+      <p>Enter your chatroom recieved on your email <span>*</span></p>
+      <input type="text" name="room_name" id="room_name" placeholder="Enter room name" required maxlength="50" class="box">
+      <input type="submit" value="Enter Room" class="btn">
+   </form>
+</section>
 
-<div class="container">
-    <style>
-    input[type=text], select {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    }
-
-    input[type=submit] {
-    width: 100%;
-    background-color: #4CAF50;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    }
-
-    input[type=submit]:hover {
-    background-color: #45a049;
-    }
-
-    div {
-    border-radius: 5px;
-    background-color: #f2f2f2;
-    padding: 20px;
-    }
-    </style>
-
-    <form id="post-form" method="POST" action="checkview">
-        {% csrf_token %}
-        <label>Room Name</label>
-        <input type="text" name="room_name" id="room_name" width="100px" />
-        <input type="submit" value="Enter Room">
-    </form>
-</div>
-
-
+<script src="static/js/script1.js"></script>
 </body>
 
 
