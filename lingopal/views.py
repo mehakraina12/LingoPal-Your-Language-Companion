@@ -251,7 +251,6 @@ def home_attempt(request):
     return render(request, 'home.html',context)
 
 
-
 def matches_attempt(request):
     username = request.session.get('username')
 
@@ -307,7 +306,7 @@ def matches_attempt(request):
             requests_collection = db['users_requests']
 
             # Find all pending requests where the current user is the receiver
-            received_requests = requests_collection.find({'receiver_username': username, 'status': 'pending'})
+            received_requests = list(requests_collection.find({'receiver_username': username, 'status': 'pending'}))
 
             context = {
                 'matched_usernames': all_matched_data,
@@ -318,10 +317,8 @@ def matches_attempt(request):
             }
 
             return render(request, 'matches.html', context)
-    
     # Handle the case where the user is not logged in or doesn't have details
     return render(request, 'matches.html', {})
-
 
 
 def profile_attempt(request):

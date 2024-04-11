@@ -141,6 +141,38 @@
 
 </section>
 
+<script>
+   $(document).ready(function() {
+       $(".inline-btn").click(function(e) {
+           e.preventDefault(); // Prevent the default form submission
+           var receiverUsername = $(this).data('receiver-username'); // Retrieve the receiver's username from data attribute
+           $(this).text("Request Sent").addClass("disabled").attr("disabled", true); // Change button text, disable it, and add "disabled" class
+           
+           // Serialize the data to be sent via AJAX
+           var formData = {
+               'receiver_username': receiverUsername,
+               'csrfmiddlewaretoken': '{{ csrf_token }}' // Add CSRF token for security
+           };
+           
+           // Send the receiver's username to the backend via AJAX
+           $.ajax({
+               type: "POST",
+               url: "/send_request",
+               data: formData,
+               success: function(response) {
+                   // Handle success response if needed
+                   console.log("Request sent successfully");
+               },
+               error: function(xhr, status, error) {
+                   // Handle error response if needed
+                   console.error("Error sending request:", error);
+               }
+           });
+       });
+   });
+</script>
+
+
 <!-- custom js file link  -->
 <script src="static/js/script1.js"></script>
 
