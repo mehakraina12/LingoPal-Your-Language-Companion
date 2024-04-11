@@ -715,7 +715,6 @@ def send(request):
     
 def getMessages(room):  
     collection = db['users_message']
-
     room_name = request.session.get('room_name')
     result = collection.find_one({'room_name': room_name})  # Use the 'room' parameter directly
     # print(room)
@@ -725,7 +724,7 @@ def getMessages(room):
     else:
         messages = []   
     return JsonResponse({"messages": messages})
-3
+
 
 def dashboard(request):
     
