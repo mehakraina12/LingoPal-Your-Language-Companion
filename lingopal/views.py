@@ -277,12 +277,12 @@ def matches_attempt(request):
             matched_users = collection.find({'native_languages': language_to_learn})
             matched_user_data = [
                 (
-                    user.get('name'), 
+                    user.get('username'), 
                     user.get('email'), 
                     user.get('native_languages'), 
                     language_mapping.get(int(user.get('language_to_learn')), 'Unknown'),
                     None,  # Placeholder for "languages to teach" for users
-                    user.get('profile_pic_path')
+                    user.get('profile_pic_path'),
                 ) 
                 for user in matched_users
             ]
@@ -304,14 +304,21 @@ def matches_attempt(request):
             else:
                 all_matched_data = matched_user_data
 
+            requests_collection = db['users_requests']
+
+            # Find all pending requests where the current user is the receiver
+            received_requests = requests_collection.find({'receiver_username': username, 'status': 'pending'})
+
             context = {
                 'matched_usernames': all_matched_data,
                 'username': username,
                 'name': name,
-                'profile_pic_path': profile_pic_path
+                'profile_pic_path': profile_pic_path,
+                'received_requests': received_requests,
             }
 
             return render(request, 'matches.html', context)
+    
     # Handle the case where the user is not logged in or doesn't have details
     return render(request, 'matches.html', {})
 
@@ -845,3 +852,60 @@ def update_password(request):
             pass  # Placeholder, no additional data retrieval for now
 
     return render(request, 'update_password.html', context)
+
+def send_request(request):
+    # Extract sender_id and receiver_id from request.POST
+    if request.method == 'POST':
+        sender_username = request.session.get('username')
+        receiver_username = request.POST.get('receiver_username')
+
+    print(sender_username)
+    print(receiver_username)
+
+
+    request.session['reciever_username'] = receiver_username
+
+
+    requests_collection = db['users_requests']
+
+    request_doc = {
+        'sender_username': sender_username,
+        'receiver_username': receiver_username,
+        'status': 'pending'
+    }
+
+    requests_collection.insert_one(request_doc)
+
+    return render(request, 'matches.html')
+
+def accept_request(request):
+    # Extract sender_id and receiver_id from request.POST
+    if request.method == 'POST':
+        sender_username = request.session.get('username')
+        receiver_username = request.session.get('receiver_username')
+
+    requests_collection = db['users_requests']
+
+    # Update status of request to "accepted"
+    requests_collection.update_one(
+        {'sender_username': sender_username, 'receiver_username': receiver_username},
+        {'$set': {'status': 'accepted'}}
+    )
+
+    return render(request, 'matches.html')
+
+def decline_request(request):
+    # Extract sender_id and receiver_id from request.POST
+    if request.method == 'POST':
+        sender_username = request.session.get('username')
+        receiver_username = request.session.get('receiver_username')
+
+    requests_collection = db['users_requests']
+
+    # Update status of request to "accepted"
+    requests_collection.update_one(
+        {'sender_username': sender_username, 'receiver_username': receiver_username},
+        {'$set': {'status': 'declined'}}
+    )
+
+    return render(request, 'matches.html')

@@ -55,6 +55,9 @@ urlpatterns = [
     path('verify_forgot' , verify_forgot , name='verify_forgot'),
     path('update_password' , update_password , name='update_password'),
     path('success_forgot' , success_forgot , name='success_forgot'),
+    path('send_request', send_request, name='send_request'),
+    path('accept_request', accept_request, name='accept_request'),
+    path('decline_request', decline_request, name='decline_request'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
