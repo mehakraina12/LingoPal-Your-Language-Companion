@@ -130,12 +130,14 @@
                         <button type="submit" class="inline-btn">Decline</button>
                      </form>
                   </div>
-               {% endif %}
-            {% endfor %}
-            <!-- If no request is received, display send request button -->
-            {% if not received_requests %}
+               {% else %}
                <a href="#" class="inline-btn" data-receiver-username="{{ matched_data.0 }}">Send Request</a>
             {% endif %}
+            {% endfor %}
+            <!-- If no request is received, display send request button -->
+            <!-- {% if not received_requests %}
+               <a href="#" class="inline-btn" data-receiver-username="{{ matched_data.0 }}">Send Request</a>
+            {% endif %} -->
          </div>
          {% endfor %}
          

@@ -304,7 +304,7 @@ def matches_attempt(request):
 
             # Find all pending requests where the current user is the receiver
             received_requests = list(requests_collection.find({'receiver_username': username, 'status': 'pending'}))
-
+            print(received_requests)
             context = {
                 'matched_usernames': all_matched_data,
                 'username': username,
@@ -803,10 +803,28 @@ def videocall(request):
     return render(request, 'videocall.html',context)
 
 def join_room(request):
+    db =client['lingopal_YLC']
+    
+        # Select the collection
+    collection = db['users_details']
+        
+        # Retrieve the username from the session if available
+    username = request.session.get('username')
+    if username:
+        user_data = collection.find_one({'username': username})
+        name=user_data.get('name')
+        profile_pic_path=user_data.get('profile_pic_path')
+        
+        # Pass the name to the template context
+    context = {
+            'name': name,
+            'username': username,
+            'profile_pic_path': profile_pic_path
+            }
     if request.method=='POST':
         roomID=request.POST['roomID']
         return redirect("/meeting?roomID="+roomID)
-    return render(request,'joinroom.html')
+    return render(request,'joinroom.html',context)
 
 def verify_forgot(request):
     return render(request , 'verify_forgot.html')

@@ -83,7 +83,7 @@
          {% csrf_token %}
          <h3>Welcome, {{name}}!</h3>
          <a href="{% url 'meeting'%}" class="btn" target="_blank">New Meeting</a>
-         <a href="{% url 'join' %}" class="btn" target="_blank">Join Meeting</a>
+         <a href="{% url 'join' %}" class="btn">Join Meeting</a>
          <a href="{% url 'home_attempt' %}" class="btn">Go back</a>
       </form>
    </section>
