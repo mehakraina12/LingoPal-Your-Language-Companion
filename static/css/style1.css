@@ -98,6 +98,8 @@ section{
 }
 
 .inline-btn,
+.accept-btn,
+.decline-btn,
 .inline-option-btn,
 .inline-delete-btn,
 .btn,
@@ -121,13 +123,17 @@ section{
 }
 
 .inline-btn,
+.accept-btn,
+.decline-btn,
 .inline-option-btn,
 .inline-delete-btn{
    display: inline-block;
 }
 
 .btn,
-.inline-btn{
+.inline-btn,
+.accept-btn,
+.decline-btn{
    background-color: var(--main-color);
 }
 

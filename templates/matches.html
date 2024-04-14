@@ -119,16 +119,8 @@
                {% if request.sender_username == matched_data.0 %}
                   <div>
                      <!-- Display accept and decline buttons -->
-                     <form action="{% url 'accept_request' %}" method="post" class="inline-form">
-                        {% csrf_token %}
-                        <input type="hidden" name="sender_username" value="{{ request.sender_username }}">
-                        <button type="submit" class="inline-btn">Accept</button>
-                     </form>
-                     <form action="{% url 'decline_request' %}" method="post" class="inline-form">
-                        {% csrf_token %}
-                        <input type="hidden" name="sender_username" value="{{ request.sender_username }}">
-                        <button type="submit" class="inline-btn">Decline</button>
-                     </form>
+                     <a href="#" data-send-name= "{{ matched_data.0 }}" class="accept-btn">Accept</a>
+                     <a href="#" data-send-name= "{{ matched_data.0 }}" class="decline-btn">Decline</a>
                   </div>
                {% else %}
                <a href="#" class="inline-btn" data-receiver-username="{{ matched_data.0 }}">Send Request</a>
@@ -146,67 +138,83 @@
 </section>
 
 <script>
-   $(document).ready(function() {
-       $(".inline-btn").click(function(e) {
-           e.preventDefault(); // Prevent the default form submission
-           var receiverUsername = $(this).data('receiver-username'); // Retrieve the receiver's username from data attribute
-           $(this).text("Request Sent").addClass("disabled").attr("disabled", true); // Change button text, disable it, and add "disabled" class
-           
-           // Serialize the data to be sent via AJAX
-           var formData = {
-               'receiver_username': receiverUsername,
-               'csrfmiddlewaretoken': '{{ csrf_token }}' // Add CSRF token for security
-           };
-           
-           // Send the receiver's username to the backend via AJAX
-           $.ajax({
-               type: "POST",
-               url: "/send_request",
-               data: formData,
-               success: function(response) {
-                   // Handle success response if needed
-                   console.log("Request sent successfully");
-               },
-               error: function(xhr, status, error) {
-                   // Handle error response if needed
-                   console.error("Error sending request:", error);
-               }
-           });
-       });
-   });
 
-   // AJAX request for accepting a request
-$.ajax({
-    type: "POST",
-    url: "{% url 'accept_request' %}",
-    data: formData,
-    success: function(response) {
-        // Handle success response if needed
-        console.log("Request accepted successfully");
-        // Update UI if necessary
-    },
-    error: function(xhr, status, error) {
-        // Handle error response if needed
-        console.error("Error accepting request:", error);
-    }
-});
-
-// AJAX request for declining a request
-$.ajax({
-    type: "POST",
-    url: "{% url 'decline_request' %}",
-    data: formData,
-    success: function(response) {
-        // Handle success response if needed
-        console.log("Request declined successfully");
-        // Update UI if necessary
-    },
-    error: function(xhr, status, error) {
-        // Handle error response if needed
-        console.error("Error declining request:", error);
-    }
-});
-
+    $(document).ready(function() {
+        // Function to handle sending requests
+        $(".inline-btn").click(function(e) {
+            e.preventDefault(); // Prevent the default form submission
+            var receiverUsername = $(this).data('receiver-username'); // Retrieve the receiver's username from data attribute
+            $(this).text("Request Sent").addClass("disabled").attr("disabled", true); // Change button text, disable it, and add "disabled" class
+    
+            // Serialize the data to be sent via AJAX
+            var formData = {
+                'receiver_username': receiverUsername,
+                'csrfmiddlewaretoken': '{{ csrf_token }}' // Add CSRF token for security
+            };
+    
+            // Send the receiver's username to the backend via AJAX
+            $.ajax({
+                type: "POST",
+                url: "/send_request",
+                data: formData,
+                success: function(response) {
+                    // Handle success response if needed
+                    console.log("Request sent successfully");
+                },
+                error: function(xhr, status, error) {
+                    // Handle error response if needed
+                    console.error("Error sending request:", error);
+                }
+            });
+        });
+    
+        // Function to handle accepting a request
+        $(".accept-btn").click(function(e) {
+            e.preventDefault();
+            var send_name = $(this).data('send-name');
+            var formData = {
+                'send_name': send_name,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            };
+    
+            $.ajax({
+                type: "POST",
+                url: "/accept_request",
+                data: formData,
+                success: function(response) {
+                    console.log("Request accepted successfully");
+                    // Update UI if necessary
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error accepting request:", error);
+                }
+            });
+        });
+    
+        // Function to handle declining a request
+        $(".decline-btn").click(function(e) {
+            e.preventDefault();
+            var send_name = $(this).data('send-name');
+            var formData = {
+                'send_name': send_name,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            };
+    
+            $.ajax({
+                type: "POST",
+                url: "/decline_request",
+                data: formData,
+                success: function(response) {
+                    console.log("Request declined successfully");
+                    // Update UI if necessary
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error declining request:", error);
+                }
+            });
+        });
+    });
+    
 
 </script>
 
