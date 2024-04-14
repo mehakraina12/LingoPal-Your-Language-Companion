@@ -613,6 +613,386 @@ def playlist_attempt(request):
 
     return render(request , 'playlist.html',context)
 
+def playlist_arabic(request):
+    username = request.session.get('username')
+
+    if username:
+        collection = db['users_details']
+        user_data = collection.find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'name': name,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+
+    return render(request , 'playlist_arabic.html',context)
+def playlist_bengali(request):
+    username = request.session.get('username')
+
+    if username:
+        collection = db['users_details']
+        user_data = collection.find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'name': name,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+
+    return render(request , 'playlist_bengali.html',context)
+
+def playlist_chinese(request):
+    username = request.session.get('username')
+
+    if username:
+        collection = db['users_details']
+        user_data = collection.find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'name': name,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+
+    return render(request , 'playlist_chinese.html',context)
+
+def playlist_dutch(request):
+    username = request.session.get('username')
+
+    if username:
+        collection = db['users_details']
+        user_data = collection.find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'name': name,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+
+    return render(request , 'playlist_dutch.html',context)
+
+def playlist_english(request):
+    username = request.session.get('username')
+
+    if username:
+        collection = db['users_details']
+        user_data = collection.find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'name': name,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+
+    return render(request , 'playlist_english.html',context)
+
+def playlist_french(request):
+    username = request.session.get('username')
+
+    if username:
+        collection = db['users_details']
+        user_data = collection.find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'name': name,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+
+    return render(request , 'playlist_french.html',context)
+
+def playlist_german(request):
+    username = request.session.get('username')
+
+    if username:
+        collection = db['users_details']
+        user_data = collection.find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'name': name,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+
+    return render(request , 'playlist_german.html',context)
+
+def playlist_greek(request):
+    username = request.session.get('username')
+
+    if username:
+        collection = db['users_details']
+        user_data = collection.find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'name': name,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+
+    return render(request , 'playlist_greek.html',context)
+
+def playlist_gujarati(request):
+    username = request.session.get('username')
+
+    if username:
+        collection = db['users_details']
+        user_data = collection.find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'name': name,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+
+    return render(request , 'playlist_gujarati.html',context)
+
+def playlist_hindi(request):
+    username = request.session.get('username')
+
+    if username:
+        collection = db['users_details']
+        user_data = collection.find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'name': name,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+
+    return render(request , 'playlist_hindi.html',context)
+
+def playlist_italian(request):
+    username = request.session.get('username')
+
+    if username:
+        collection = db['users_details']
+        user_data = collection.find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'name': name,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+
+    return render(request , 'playlist_italian.html',context)
+
+def playlist_japanese(request):
+    username = request.session.get('username')
+
+    if username:
+        collection = db['users_details']
+        user_data = collection.find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'name': name,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+
+    return render(request , 'playlist_japanese.html',context)
+
+def playlist_tamil(request):
+    username = request.session.get('username')
+
+    if username:
+        collection = db['users_details']
+        user_data = collection.find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'name': name,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+
+    return render(request , 'playlist_tamil.html',context)
+
+def playlist_korean(request):
+    username = request.session.get('username')
+
+    if username:
+        collection = db['users_details']
+        user_data = collection.find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'name': name,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+
+    return render(request , 'playlist_korean.html',context)
+
+def playlist_odia(request):
+    username = request.session.get('username')
+
+    if username:
+        collection = db['users_details']
+        user_data = collection.find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'name': name,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+
+    return render(request , 'playlist_odia.html',context)
+
+def playlist_punjabi(request):
+    username = request.session.get('username')
+
+    if username:
+        collection = db['users_details']
+        user_data = collection.find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'name': name,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+
+    return render(request , 'playlist_punjabi.html',context)
+
+def playlist_russian(request):
+    username = request.session.get('username')
+
+    if username:
+        collection = db['users_details']
+        user_data = collection.find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'name': name,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+
+    return render(request , 'playlist_russian.html',context)
+
+def playlist_spanish(request):
+    username = request.session.get('username')
+
+    if username:
+        collection = db['users_details']
+        user_data = collection.find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'name': name,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+
+    return render(request , 'playlist_spanish.html',context)
+
+def playlist_telugu(request):
+    username = request.session.get('username')
+
+    if username:
+        collection = db['users_details']
+        user_data = collection.find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'name': name,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+
+    return render(request , 'playlist_telugu.html',context)
+
+def playlist_urdu(request):
+    username = request.session.get('username')
+
+    if username:
+        collection = db['users_details']
+        user_data = collection.find_one({'username': username})
+
+        if user_data:
+            name = user_data.get('name')
+            profile_pic_path = user_data.get('profile_pic_path')
+
+            context = {
+                'username': username,
+                'name': name,
+                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+            }
+
+    return render(request , 'playlist_urdu.html',context)
+
+
 def take_test(request, language):
 
     quiz_pages = {
