@@ -697,7 +697,11 @@ def send(request):
         # Retrieve room_name and username from session
         room_name = request.session.get('room_name')
         username = request.session.get('username')
-
+        collection2 = db['users_details']
+        user_data = collection2.find_one({'username': username})
+        if user_data:
+            profile_pic_path = user_data.get('profile_pic_path')
+            print("Profile Pic Path:", profile_pic_path)
         if room_name and username:
             message_content = request.POST.get('message')
 
@@ -709,7 +713,7 @@ def send(request):
                 # If there are existing messages, append the new message to the list
                 messages_list = existing_messages.get('messages', [])
                 current_datetime = datetime.now()
-                messages_list.append({'username': username, 'message': message_content, 'timestamp': current_datetime})
+                messages_list.append({'username': username, 'message': message_content, 'timestamp': current_datetime, 'profile_pic_path': profile_pic_path})
                 # Update the existing document with the new messages list
                 users_message_collection.update_one({'room_name': room_name}, {'$set': {'messages': messages_list}})
             else:
@@ -717,7 +721,7 @@ def send(request):
                 current_datetime = datetime.now()
                 users_message_collection.insert_one({
                     'room_name': room_name,
-                    'messages': [{'username': username, 'message': message_content, 'timestamp': current_datetime}]
+                    'messages': [{'username': username, 'message': message_content, 'timestamp': current_datetime, 'profile_pic_path': profile_pic_path}]
                 })
 
             return JsonResponse({'status': 'success', 'message': 'Message sent successfully'})
@@ -733,6 +737,16 @@ def getMessages(request,room):
     result = collection.find_one({'room_name': room_name})  # Use the 'room' parameter directly
     if result:
         messages = result.get('messages', [])
+        for message in messages:
+            timestamp = message.get('timestamp')
+            if timestamp:
+                formatted_time = timestamp.strftime('%I:%M %p')  # Format as '12:30 AM/PM'
+                message['timestamp'] = formatted_time
+            username = message.get('username')
+            user_data = db['users_details'].find_one({'username': username})
+            if user_data:
+                profile_pic_path = user_data.get('profile_pic_path')
+                message['profile_pic_path'] = profile_pic_path
     else:
         messages = []   
     return JsonResponse({"messages": messages})
