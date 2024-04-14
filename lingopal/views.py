@@ -304,7 +304,7 @@ def matches_attempt(request):
 
             # Find all pending requests where the current user is the receiver
             received_requests = list(requests_collection.find({'receiver_username': username, 'status': 'pending'}))
-            print(received_requests)
+            
             context = {
                 'matched_usernames': all_matched_data,
                 'username': username,
@@ -923,33 +923,35 @@ def send_request(request):
     return render(request, 'matches.html')
 
 def accept_request(request):
-    # Extract sender_id and receiver_id from request.POST
-    if request.method == 'POST':
-        sender_username = request.session.get('username')
-        receiver_username = request.session.get('receiver_username')
+    # Extract sender_id and receiver_id from request.POST  
+    sender_username = request.session.get('username')
+    send_name = request.POST.get('send_name')
+
+    print(sender_username)
+    print(send_name)
 
     requests_collection = db['users_requests']
 
     # Update status of request to "accepted"
     requests_collection.update_one(
-        {'sender_username': sender_username, 'receiver_username': receiver_username},
+        {'sender_username': send_name, 'receiver_username': sender_username},
         {'$set': {'status': 'accepted'}}
     )
-
     return render(request, 'matches.html')
 
 def decline_request(request):
     # Extract sender_id and receiver_id from request.POST
-    if request.method == 'POST':
-        sender_username = request.session.get('username')
-        receiver_username = request.session.get('receiver_username')
+    sender_username = request.session.get('username')
+    send_name = request.POST.get('send_name')
+
+    print(sender_username)
+    print(send_name)
 
     requests_collection = db['users_requests']
 
     # Update status of request to "accepted"
     requests_collection.update_one(
-        {'sender_username': sender_username, 'receiver_username': receiver_username},
+        {'sender_username': send_name, 'receiver_username': sender_username},
         {'$set': {'status': 'declined'}}
     )
-
     return render(request, 'matches.html')
