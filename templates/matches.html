@@ -4,7 +4,7 @@
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>teachers</title>
+   <title>Your Matches</title>
 
    <!-- font awesome cdn link  -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
@@ -172,7 +172,43 @@
            });
        });
    });
+
+   // AJAX request for accepting a request
+$.ajax({
+    type: "POST",
+    url: "{% url 'accept_request' %}",
+    data: formData,
+    success: function(response) {
+        // Handle success response if needed
+        console.log("Request accepted successfully");
+        // Update UI if necessary
+    },
+    error: function(xhr, status, error) {
+        // Handle error response if needed
+        console.error("Error accepting request:", error);
+    }
+});
+
+// AJAX request for declining a request
+$.ajax({
+    type: "POST",
+    url: "{% url 'decline_request' %}",
+    data: formData,
+    success: function(response) {
+        // Handle success response if needed
+        console.log("Request declined successfully");
+        // Update UI if necessary
+    },
+    error: function(xhr, status, error) {
+        // Handle error response if needed
+        console.error("Error declining request:", error);
+    }
+});
+
+
 </script>
+
+
 
 
 <!-- custom js file link  -->
