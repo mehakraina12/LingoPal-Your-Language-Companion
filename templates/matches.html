@@ -83,60 +83,62 @@
    </form>
 
    <div class="box-container">
-      {% for matched_data in matched_usernames %}
-          <div class="box">
-              <div class="tutor">
-                  <img src="{{ matched_data.5 }}" alt="">
+    {% for matched_data in matched_usernames %}
+    <div class="box">
+        <div class="tutor">
+            <img src="{{ matched_data.5 }}" alt="">
+            <div>
+                <h3>{{ matched_data.0 }}</h3>
+                <span>{{ matched_data.1 }}</span>
+            </div>
+        </div>
+        {% if matched_data.2 %}
+            <p>Languages known:
+                <span>
+                    {% for language_known in matched_data.2 %}
+                        {{ language_known }}
+                        {% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </span>
+            </p>
+        {% endif %}
+        <p>
+            {% if matched_data.3 %}
+                Languages to learn:
+                <span>{{ matched_data.3 }}</span>
+            {% endif %}
+        </p>
+        <p>
+            {% if matched_data.4 %}
+                Languages to teach:
+                <span>{{ matched_data.4 }}</span>
+            {% endif %}
+        </p>
+        
+        {% for request in received_requests %}
+               {% if request.sender_username == matched_data.0 %}
                   <div>
-                      <h3>{{ matched_data.0 }}</h3>
-                      <span>{{ matched_data.1 }}</span>
+                     <!-- Display accept and decline buttons -->
+                     <form action="{% url 'accept_request' %}" method="post" class="inline-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="sender_username" value="{{ request.sender_username }}">
+                        <button type="submit" class="inline-btn">Accept</button>
+                     </form>
+                     <form action="{% url 'decline_request' %}" method="post" class="inline-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="sender_username" value="{{ request.sender_username }}">
+                        <button type="submit" class="inline-btn">Decline</button>
+                     </form>
                   </div>
-              </div>
-              {% if matched_data.2 %}
-                  <p>Languages known:
-                      <span>
-                          {% for language_known in matched_data.2 %}
-                              {{ language_known }}
-                              {% if not forloop.last %}, {% endif %}
-                          {% endfor %}
-                      </span>
-                  </p>
-              {% endif %}
-              <p>
-                  {% if matched_data.3 %}
-                      Languages to learn:
-                      <span>{{ matched_data.3 }}</span>
-                  {% endif %}
-              </p>
-              <p>
-                  {% if matched_data.4 %}
-                      Languages to teach:
-                      <span>{{ matched_data.4 }}</span>
-                  {% endif %}
-              </p>
-              {% for request in received_requests %}
-                  {% if request.sender_username == matched_data.0 %}
-                      <div>
-                          <!-- Display accept and decline buttons -->
-                          <form action="{% url 'accept_request' %}" method="post" class="inline-form">
-                              {% csrf_token %}
-                              <input type="hidden" name="sender_username" value="{{ request.sender_username }}">
-                              <button type="submit" class="inline-btn">Accept</button>
-                          </form>
-                          <form action="{% url 'decline_request' %}" method="post" class="inline-form">
-                              {% csrf_token %}
-                              <input type="hidden" name="sender_username" value="{{ request.sender_username }}">
-                              <button type="submit" class="inline-btn">Decline</button>
-                          </form>
-                      </div>
-                  {% endif %}
-              {% endfor %}
-              <!-- If no request is received, display send request button -->
-              {% if not received_requests %}
-                  <a href="#" class="inline-btn" data-receiver-username="{{ matched_data.0 }}">Send Request</a>
-              {% endif %}
-          </div>
-      {% endfor %}
+               {% endif %}
+            {% endfor %}
+            <!-- If no request is received, display send request button -->
+            {% if not received_requests %}
+               <a href="#" class="inline-btn" data-receiver-username="{{ matched_data.0 }}">Send Request</a>
+            {% endif %}
+         </div>
+         {% endfor %}
+         
    </div>
 
 </section>
