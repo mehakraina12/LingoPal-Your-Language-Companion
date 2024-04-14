@@ -117,8 +117,6 @@ def register_attempt(request):
         return render(request, 'register.html')
     
 
-
-
 def login_attempt(request):
     collection = db['users_details']
     context={}
@@ -201,7 +199,6 @@ def update_profile(request):
 
     return render(request, 'update_profile.html', context)
 
-
 def index(request):
     return render(request , 'index.html')
 def success(request):
@@ -212,6 +209,7 @@ def token_send(request):
     return render(request , 'token_send.html')
 def success_attempt(request):
     return render(request , 'success.html')
+
 def feedback_attempt(request):
     username = request.session.get('username')
 
@@ -249,7 +247,6 @@ def home_attempt(request):
             }
 
     return render(request, 'home.html',context)
-
 
 def matches_attempt(request):
     username = request.session.get('username')
@@ -319,7 +316,6 @@ def matches_attempt(request):
             return render(request, 'matches.html', context)
     # Handle the case where the user is not logged in or doesn't have details
     return render(request, 'matches.html', {})
-
 
 def profile_attempt(request):
     username = request.session.get('username')
@@ -429,7 +425,6 @@ def user_language(request):
 
     return render(request, 'user_language.html', context)
 
-
 def language_test(request):
     username = request.session.get('username')
     context = {}
@@ -480,9 +475,9 @@ def language_test(request):
 
     return render(request, 'language_test.html', context)
 
-
 def quiz_attempt(request):
     return render(request , 'quiz.html')
+
 def resources_attempt(request):
     username = request.session.get('username')
 
@@ -501,8 +496,6 @@ def resources_attempt(request):
             }
 
     return render(request , 'resources.html',context)
-
-from django.shortcuts import render, redirect
 
 def settings_attempt(request):
     username = request.session.get('username')
@@ -578,9 +571,6 @@ def settings_attempt(request):
                 return redirect('settings_attempt')
 
     return render(request, 'settings.html', context)
-
-
-
 
 def teacher_profile_attempt(request):
     username = request.session.get('username')
@@ -821,7 +811,6 @@ def join_room(request):
 def verify_forgot(request):
     return render(request , 'verify_forgot.html')
 
-@csrf_exempt
 def VerifyForgot(request):
     print("Hello")
     if request.method == "POST":
@@ -889,27 +878,29 @@ def update_password(request):
     return render(request, 'update_password.html', context)
 
 def send_request(request):
-    # Extract sender_id and receiver_id from request.POST
     if request.method == 'POST':
-        sender_username = request.session.get('username')
-        receiver_username = request.POST.get('receiver_username')
+            sender_username = request.session.get('username')
+            receiver_username = request.POST.get('receiver_username')
 
-    print(sender_username)
-    print(receiver_username)
-
-
-    request.session['reciever_username'] = receiver_username
-
-
-    requests_collection = db['users_requests']
-
-    request_doc = {
-        'sender_username': sender_username,
-        'receiver_username': receiver_username,
-        'status': 'pending'
-    }
-
-    requests_collection.insert_one(request_doc)
+            # Ensure both sender and receiver usernames are available
+            if sender_username and receiver_username:
+                requests_collection = db['users_requests']
+                
+                # Ensure unique index on sender and receiver usernames
+                requests_collection.create_index([('sender_username', 1), ('receiver_username', 1)], unique=True)
+                
+                # Attempt to insert the request document
+                try:
+                    request_doc = {
+                        'sender_username': sender_username,
+                        'receiver_username': receiver_username,
+                        'status': 'pending'
+                    }
+                    requests_collection.insert_one(request_doc)
+                except Exception as e:
+                    # Handle the case where the combination already exists
+                    # You might want to log this or inform the user
+                    print("Error:", e)
 
     return render(request, 'matches.html')
 
