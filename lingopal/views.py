@@ -772,6 +772,7 @@ def dashboard(request):
     # If username is available, query the database to get the user's name
     if username:
         user_data = collection.find_one({'username': username})
+        profile_pic_path = user_data.get('profile_pic_path')
         if user_data:
             name = user_data.get('name', 'Guest')  # Default to 'Guest' if name is not available
         else:
@@ -780,7 +781,11 @@ def dashboard(request):
         name = 'Guest'
     
     # Pass the name to the template context
-    context = {'name': name}
+    context = {
+        'name': name,
+        'username': username,
+        'profile_pic_path': profile_pic_path
+        }
     
     return render(request, 'dashboard.html', context)
 
