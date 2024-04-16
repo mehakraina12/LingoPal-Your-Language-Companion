@@ -113,56 +113,86 @@
 
 <section class="courses">
 
-   <h1 class="heading">Your Companion</h1>
+   <h1 class="heading">Your Companions</h1>
 
-    <div class="box-container">
-
+   <div class="box-container">
+      {% for sender_username in sender_usernames %}
       <div class="box">
-         <div class="thumb">
-             <img src="static/images/english.jpg" alt="">
-         </div>
-         <h3 class="title">Complete English Tutorial</h3>
-         <div class="button-group">
-             <a href="{% url 'dashboard'%}" class="inline-btn">
-                 <i class="fas fa-video"></i> Video Call
-             </a>
-             <a href="{% url 'room_attempt'%}" class="inline-btn">
-                 <i class="fas fa-comments"></i> Chat
-             </a>
-         </div>
-     </div>
-     
-
-      <div class="box">
-         <div class="thumb">
-            <img src="static/images/hindi.jpg" alt="">
-         </div>
-         <h3 class="title">Complete Hindi tutorial</h3>
-         <div class="button-group">
-            <a href="" class="inline-btn">
-                <i class="fas fa-video"></i> Video Call
-            </a>
-            <a href="" class="inline-btn">
-                <i class="fas fa-comments"></i> Chat
-            </a>
+        <div class="thumb">
+          <img src="static/images/english.jpg" alt="">
+        </div>
+        <h3 class="title">Companion: {{ sender_username }}</h3>
+        <div class="button-group">
+          <a href="{% url 'dashboard' %}" class="inline-btn">
+            <i class="fas fa-video"></i> Video Call
+          </a>
+          <a href="{% url 'room' sender_username %}" class="inline-btn">
+            <i class="fas fa-comments"></i> Chat
+          </a>
         </div>
       </div>
-
+      {% endfor %}
+    
+      {% for receiver_username in receiver_usernames %}
       <div class="box">
-         <div class="thumb">
-            <img src="static/images/french.png" alt="">
-         </div>
-         <h3 class="title">Complete French Tutorial</h3>
-         <div class="button-group">
-            <a href="#" class="inline-btn">
-                <i class="fas fa-video"></i> Video Call
-            </a>
-            <a href="#" class="inline-btn">
-                <i class="fas fa-comments"></i> Chat
-            </a>
+        <div class="thumb">
+          <img src="static/images/english.jpg" alt="">
+        </div>
+        <h3 class="title">Companion: {{ receiver_username }}</h3>
+        <div class="button-group">
+          <a href="{% url 'dashboard' %}" class="inline-btn">
+            <i class="fas fa-video"></i> Video Call
+          </a>
+          <a href="{% url 'room' receiver_username %}" class="inline-btn">
+            <i class="fas fa-comments"></i> Chat
+          </a>
         </div>
       </div>
-   </div>
+      {% endfor %}
+    </div><div class="box-container">
+      {% for sender_detail in sender_details %}
+      <div class="box">
+        <div class="thumb">
+          <img src="{{ sender_detail.profile_pic_path }}" alt="">
+        </div>
+        <h3 class="title">Companion: {{ sender_detail.name }}</h3>
+        <p>Username: {{ sender_detail.username }}</p>
+        <p>Language to Learn: {{ sender_detail.language_to_learn }}</p>
+        <p>Native Languages: {{ sender_detail.native_languages }}</p>
+        <div class="button-group">
+          <a href="{% url 'dashboard' %}" class="inline-btn">
+            <i class="fas fa-video"></i> Video Call
+          </a>
+          <a href="{% url 'room' sender_detail.username %}" class="inline-btn">
+            <i class="fas fa-comments"></i> Chat
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    
+      {% for receiver_detail in receiver_details %}
+      <div class="box">
+        <div class="thumb">
+          <img src="{{ receiver_detail.profile_pic_path }}" alt="">
+        </div>
+        <h3 class="title">Companion: {{ receiver_detail.name }}</h3>
+        <p>Username: {{ receiver_detail.username }}</p>
+        <p>Language to Learn: {{ receiver_detail.language_to_learn }}</p>
+        <p>Native Languages: {{ receiver_detail.native_languages }}</p>
+        <div class="button-group">
+          <a href="{% url 'dashboard' %}" class="inline-btn">
+            <i class="fas fa-video"></i> Video Call
+          </a>
+          <a href="{% url 'room' receiver_detail.username %}" class="inline-btn">
+            <i class="fas fa-comments"></i> Chat
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    
+    
+
 </section>
 
 

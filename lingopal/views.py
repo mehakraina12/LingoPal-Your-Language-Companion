@@ -240,13 +240,32 @@ def home_attempt(request):
             name = user_data.get('name')
             profile_pic_path = user_data.get('profile_pic_path')
 
+            # Find all senders and receivers with status "accepted"
+            requests_collection = db['users_requests']
+            sender_requests = requests_collection.find({'receiver_username': username, 'status': 'accepted'})
+            receiver_requests = requests_collection.find({'sender_username': username, 'status': 'accepted'})
+
+            # Extract sender and receiver usernames from the requests
+            sender_usernames = [request['sender_username'] for request in sender_requests]
+            receiver_usernames = [request['receiver_username'] for request in receiver_requests]
+
+            # Fetch details of senders and receivers from users_details
+            sender_details = collection.find({'username': {'$in': sender_usernames}})
+            receiver_details = collection.find({'username': {'$in': receiver_usernames}})
+
             context = {
                 'username': username,
                 'name': name,
-                'profile_pic_path': profile_pic_path  # Add profile pic path to context
+                'profile_pic_path': profile_pic_path,
+                'sender_details': sender_details,  # Sender details queryset
+                'receiver_details': receiver_details  # Receiver details queryset
             }
+    else:
+        context = {}  # No username in session, empty context
 
-    return render(request, 'home.html',context)
+    return render(request, 'home.html', context)
+
+
 
 def matches_attempt(request):
     username = request.session.get('username')
