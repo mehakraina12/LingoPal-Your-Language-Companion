@@ -265,8 +265,6 @@ def home_attempt(request):
 
     return render(request, 'home.html', context)
 
-
-
 def matches_attempt(request):
     username = request.session.get('username')
 

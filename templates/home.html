@@ -126,7 +126,7 @@
           <a href="{% url 'dashboard' %}" class="inline-btn">
             <i class="fas fa-video"></i> Video Call
           </a>
-          <a href="{% url 'room' sender_username %}" class="inline-btn">
+          <a href="{% url 'room_attempt' %}" class="inline-btn">
             <i class="fas fa-comments"></i> Chat
           </a>
         </div>
@@ -143,7 +143,7 @@
           <a href="{% url 'dashboard' %}" class="inline-btn">
             <i class="fas fa-video"></i> Video Call
           </a>
-          <a href="{% url 'room' receiver_username %}" class="inline-btn">
+          <a href="{% url 'room_attempt' %}" class="inline-btn">
             <i class="fas fa-comments"></i> Chat
           </a>
         </div>
@@ -163,7 +163,7 @@
           <a href="{% url 'dashboard' %}" class="inline-btn">
             <i class="fas fa-video"></i> Video Call
           </a>
-          <a href="{% url 'room' sender_detail.username %}" class="inline-btn">
+          <a href="{% url 'room_attempt' %}" class="inline-btn">
             <i class="fas fa-comments"></i> Chat
           </a>
         </div>
@@ -183,7 +183,7 @@
           <a href="{% url 'dashboard' %}" class="inline-btn">
             <i class="fas fa-video"></i> Video Call
           </a>
-          <a href="{% url 'room' receiver_detail.username %}" class="inline-btn">
+          <a href="{% url 'room_attempt' %}" class="inline-btn">
             <i class="fas fa-comments"></i> Chat
           </a>
         </div>
