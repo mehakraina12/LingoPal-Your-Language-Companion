@@ -137,36 +137,67 @@
 
 </section>
 
+<style>
+    /* Add this CSS to style the disabled button */
+    .inline-btn.disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        /* Add any additional styling for the disabled state here */
+    }
+ </style>
+
 <script>
 
-    $(document).ready(function() {
-        // Function to handle sending requests
-        $(".inline-btn").click(function(e) {
-            e.preventDefault(); // Prevent the default form submission
-            var receiverUsername = $(this).data('receiver-username'); // Retrieve the receiver's username from data attribute
-            $(this).text("Request Sent").addClass("disabled").attr("disabled", true); // Change button text, disable it, and add "disabled" class
-    
-            // Serialize the data to be sent via AJAX
-            var formData = {
-                'receiver_username': receiverUsername,
-                'csrfmiddlewaretoken': '{{ csrf_token }}' // Add CSRF token for security
-            };
-    
-            // Send the receiver's username to the backend via AJAX
-            $.ajax({
-                type: "POST",
-                url: "/send_request",
-                data: formData,
-                success: function(response) {
-                    // Handle success response if needed
-                    console.log("Request sent successfully");
-                },
-                error: function(xhr, status, error) {
-                    // Handle error response if needed
-                    console.error("Error sending request:", error);
-                }
-            });
+$(document).ready(function() {
+    // Function to handle sending requests
+    $(".inline-btn").each(function() {
+        var receiverUsername = $(this).data('receiver-username');
+        var buttonId = "button_" + receiverUsername;
+        var isDisabled = localStorage.getItem(buttonId);
+        if (isDisabled === "true") {
+            $(this).text("Request Sent").addClass("disabled").attr("disabled", true);
+        }
+    });
+
+    $(".inline-btn").click(function(e) {
+        e.preventDefault(); // Prevent the default form submission
+        var receiverUsername = $(this).data('receiver-username'); // Retrieve the receiver's username from data attribute
+        var buttonId = "button_" + receiverUsername;
+        localStorage.setItem(buttonId, "true"); // Store the disabled state in local storage
+        $(this).text("Request Sent").addClass("disabled").attr("disabled", true); // Change button text, disable it, and add "disabled" class
+
+        // Serialize the data to be sent via AJAX
+        var formData = {
+            'receiver_username': receiverUsername,
+            'csrfmiddlewaretoken': '{{ csrf_token }}' // Add CSRF token for security
+        };
+
+        // Send the receiver's username to the backend via AJAX
+        $.ajax({
+            type: "POST",
+            url: "/send_request",
+            data: formData,
+            success: function(response) {
+                // Handle success response if needed
+                console.log("Request sent successfully");
+            },
+            error: function(xhr, status, error) {
+                // Handle error response if needed
+                console.error("Error sending request:", error);
+            }
         });
+    });
+});
+
+        // Restore button states on page refresh
+        $(window).on('load', function() {
+            $(".inline-btn").each(function() {
+                var receiverUsername = $(this).data('receiver-username');
+                var buttonId = "button_" + receiverUsername;
+                localStorage.removeItem(buttonId); // Remove the stored disabled state
+                $(this).text("Send Request").removeClass("disabled").removeAttr("disabled"); // Reset button text, remove "disabled" class and attribute
+            });
+
     
         // Function to handle accepting a request
         $(".accept-btn").click(function(e) {
@@ -176,13 +207,16 @@
                 'send_name': send_name,
                 'csrfmiddlewaretoken': '{{ csrf_token }}'
             };
-    
+
+            var parentContainer = $(this).parent(); // Get the parent container
             $.ajax({
                 type: "POST",
                 url: "/accept_request",
                 data: formData,
                 success: function(response) {
                     console.log("Request accepted successfully");
+                    parentContainer.remove(); // Remove the parent container
+                    displayStatus(parentContainer, "Accepted"); // Display status message
                     // Update UI if necessary
                 },
                 error: function(xhr, status, error) {
@@ -190,7 +224,7 @@
                 }
             });
         });
-    
+
         // Function to handle declining a request
         $(".decline-btn").click(function(e) {
             e.preventDefault();
@@ -199,20 +233,30 @@
                 'send_name': send_name,
                 'csrfmiddlewaretoken': '{{ csrf_token }}'
             };
-    
+
+            var parentContainer = $(this).parent(); // Get the parent container
             $.ajax({
                 type: "POST",
                 url: "/decline_request",
                 data: formData,
                 success: function(response) {
                     console.log("Request declined successfully");
+                    parentContainer.remove(); // Remove the parent container
+                    displayStatus(parentContainer, "Declined"); // Display status message
                     // Update UI if necessary
                 },
                 error: function(xhr, status, error) {
                     console.error("Error declining request:", error);
                 }
             });
+            // Function to display status message
+        function displayStatus(parentContainer, status) {
+            var statusMessage = $("<p>").text(status);
+            parentContainer.after(statusMessage);
+        }
         });
+
+
     });
     
 

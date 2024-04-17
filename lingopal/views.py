@@ -1228,6 +1228,7 @@ def join_room(request):
 def verify_forgot(request):
     return render(request , 'verify_forgot.html')
 
+@csrf_exempt
 def VerifyForgot(request):
     print("Hello")
     if request.method == "POST":
