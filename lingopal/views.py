@@ -323,7 +323,48 @@ def matches_attempt(request):
 
             # Remove accepted requests from received requests
             received_requests = [req for req in received_requests if req.get('status') != 'accepted']
-            
+
+            # Remove users who have sent accepted requests from matched users
+            accepted_requests = list(requests_collection.find({'receiver_username': username, 'status': 'accepted'}))
+            accepted_usernames = [req.get('sender_username') for req in accepted_requests]
+            all_matched_data = [user for user in all_matched_data if user[0] not in accepted_usernames]
+
+            # Remove the receiver's profile from sender's matches if the request is accepted
+            for req in accepted_requests:
+                sender_username = req.get('sender_username')
+                sender_matched_users = list(collection.find({'username': sender_username}))
+                sender_matched_user_data = [
+                    (
+                        user.get('username'), 
+                        user.get('email'), 
+                        user.get('native_languages'), 
+                        language_mapping.get(int(user.get('language_to_learn')), 'Unknown'),
+                        None,  # Placeholder for "languages to teach" for users
+                        user.get('profile_pic_path'),
+                    ) 
+                    for user in sender_matched_users
+                ]
+                sender_matched_user_data = [user for user in sender_matched_user_data if user[0] != username]
+                collection.update_one({'username': sender_username}, {'$set': {'matched_user_data': sender_matched_user_data}})
+
+            # Remove the sender's profile from receiver's matches if the request is accepted
+            for req in accepted_requests:
+                receiver_username = req.get('receiver_username')
+                receiver_matched_users = list(collection.find({'username': receiver_username}))
+                receiver_matched_user_data = [
+                    (
+                        user.get('username'), 
+                        user.get('email'), 
+                        user.get('native_languages'), 
+                        language_mapping.get(int(user.get('language_to_learn')), 'Unknown'),
+                        None,  # Placeholder for "languages to teach" for users
+                        user.get('profile_pic_path'),
+                    ) 
+                    for user in receiver_matched_users
+                ]
+                receiver_matched_user_data = [user for user in receiver_matched_user_data if user[0] != username]
+                collection.update_one({'username': receiver_username}, {'$set': {'matched_user_data': receiver_matched_user_data}})
+
             context = {
                 'matched_usernames': all_matched_data,
                 'username': username,
