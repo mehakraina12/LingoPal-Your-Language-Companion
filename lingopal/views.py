@@ -272,6 +272,7 @@ def matches_attempt(request):
         # Connect to MongoDB  # Replace with your MongoDB connection details
         collection = db['users_details']
         experts_collection = db['users_experts']
+        requests_collection = db['users_requests']
 
         # Find the current user's data
         user_data = collection.find_one({'username': username})
@@ -317,10 +318,11 @@ def matches_attempt(request):
             else:
                 all_matched_data = matched_user_data
 
-            requests_collection = db['users_requests']
-
             # Find all pending requests where the current user is the receiver
             received_requests = list(requests_collection.find({'receiver_username': username, 'status': 'pending'}))
+
+            # Remove accepted requests from received requests
+            received_requests = [req for req in received_requests if req.get('status') != 'accepted']
             
             context = {
                 'matched_usernames': all_matched_data,
@@ -331,8 +333,10 @@ def matches_attempt(request):
             }
 
             return render(request, 'matches.html', context)
+    
     # Handle the case where the user is not logged in or doesn't have details
     return render(request, 'matches.html', {})
+
 
 def profile_attempt(request):
     username = request.session.get('username')
