@@ -10,6 +10,7 @@ from lingopal.forms import CreateUserForm
 from django.core.mail import send_mail
 from lingopal.settings import EMAIL_HOST_USER
 import random
+import string
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login
@@ -229,6 +230,12 @@ def feedback_attempt(request):
 
     return render(request, 'feedback.html', context)
 
+# def generate_random_group_name():
+#     """Generate a random group name."""
+#     letters = string.ascii_letters
+#     return ''.join(random.choice(letters) for _ in range(8))  # Adjust length as needed
+
+
 def home_attempt(request):
     username = request.session.get('username')
 
@@ -250,15 +257,51 @@ def home_attempt(request):
             receiver_usernames = [request['receiver_username'] for request in receiver_requests]
 
             # Fetch details of senders and receivers from users_details
-            sender_details = collection.find({'username': {'$in': sender_usernames}})
-            receiver_details = collection.find({'username': {'$in': receiver_usernames}})
+            sender_details = list(collection.find({'username': {'$in': sender_usernames}}))  # Convert to list
+            receiver_details = list(collection.find({'username': {'$in': receiver_usernames}}))  # Convert to list
+            for sender_detail in sender_details:
+                language_to_learn_str = sender_detail.get('language_to_learn', '')
+                language_to_learn = int(language_to_learn_str) if language_to_learn_str.isdigit() else None
+                sender_detail['language_to_learn'] = language_mapping.get(language_to_learn, 'Unknown')
+
+            for receiver_detail in receiver_details:
+                language_to_learn_str = receiver_detail.get('language_to_learn', '')
+                language_to_learn = int(language_to_learn_str) if language_to_learn_str.isdigit() else None
+                receiver_detail['language_to_learn'] = language_mapping.get(language_to_learn, 'Unknown')
+
+            # # Generate a random group name
+            # group_name = generate_random_group_name()
+
+            # # Send email to senders
+            # for sender_detail in sender_details:
+            #     sender_email = sender_detail.get('email')  # Assuming email field exists in user details
+            #     if sender_email:
+            #         send_mail(
+            #             'Group Name',
+            #             f'Your group name is {group_name}.',
+            #             'from@example.com',
+            #             [sender_email],
+            #             fail_silently=False,
+            #         )
+
+            # # Send email to receivers
+            # for receiver_detail in receiver_details:
+            #     receiver_email = receiver_detail.get('email')  # Assuming email field exists in user details
+            #     if receiver_email:
+            #         send_mail(
+            #             'Group Name',
+            #             f'Your group name is {group_name}.',
+            #             'from@example.com',
+            #             [receiver_email],
+            #             fail_silently=False,
+            #         )
 
             context = {
                 'username': username,
                 'name': name,
                 'profile_pic_path': profile_pic_path,
                 'sender_details': sender_details,  # Sender details queryset
-                'receiver_details': receiver_details  # Receiver details queryset
+                'receiver_details': receiver_details
             }
     else:
         context = {}  # No username in session, empty context
@@ -539,6 +582,30 @@ def language_test(request):
 
 def quiz_attempt(request):
     return render(request , 'quiz.html')
+def quiz_beginner_arabic(request):
+    return render(request , 'quiz_beginner_arabic.html')
+def quiz_intermediate_arabic(request):
+    return render(request , 'quiz_intermediate_arabic.html')
+def quiz_advanced_arabic(request):
+    return render(request , 'quiz_advanced_arabic.html')
+def quiz_beginner_bengali(request):
+    return render(request , 'quiz_beginner_bengali.html')
+def quiz_intermediate_bengali(request):
+    return render(request , 'quiz_intermediate_bengali.html')
+def quiz_advanced_bengali(request):
+    return render(request , 'quiz_advanced_bengali.html')
+def quiz_beginner_chinese(request):
+    return render(request , 'quiz_beginner_chinese.html')
+def quiz_intermediate_chinese(request):
+    return render(request , 'quiz_intermediate_chinese.html')
+def quiz_advanced_chinese(request):
+    return render(request , 'quiz_advanced_chinese.html')
+def quiz_beginner_dutch(request):
+    return render(request , 'quiz_beginner_dutch.html')
+def quiz_intermediate_dutch(request):
+    return render(request , 'quiz_intermediate_dutch.html')
+def quiz_advanced_dutch(request):
+    return render(request , 'quiz_advanced_dutch.html')
 
 def resources_attempt(request):
     username = request.session.get('username')

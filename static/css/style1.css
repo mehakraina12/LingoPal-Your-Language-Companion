@@ -530,6 +530,19 @@ section{
    background-color: var(--white);
    padding: 2rem;
 }
+.courses .box-companion .box,p{
+   font-size: 1.6rem;
+   color: var(--black);
+   margin-bottom: .2rem;
+   font-weight: bold;
+}
+.courses .box-companion .box,h3{
+   font-size: 2rem;
+   color: rgb(165, 42, 106);
+   margin-bottom: 0.4rem;
+   font-weight: bold;
+}
+
 .courses .box-companion .box .thumb img{
    height: 10rem;
    width: 10rem;
