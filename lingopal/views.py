@@ -606,6 +606,42 @@ def quiz_intermediate_dutch(request):
     return render(request , 'quiz_intermediate_dutch.html')
 def quiz_advanced_dutch(request):
     return render(request , 'quiz_advanced_dutch.html')
+def quiz_beginner_english(request):
+    return render(request , 'quiz_beginner_english.html')
+def quiz_intermediate_english(request):
+    return render(request , 'quiz_intermediate_english.html')
+def quiz_advanced_english(request):
+    return render(request , 'quiz_advanced_english.html')
+def quiz_beginner_french(request):
+    return render(request , 'quiz_beginner_french.html')
+def quiz_intermediate_french(request):
+    return render(request , 'quiz_intermediate_french.html')
+def quiz_advanced_french(request):
+    return render(request , 'quiz_advanced_french.html')
+def quiz_beginner_german(request):
+    return render(request , 'quiz_beginner_german.html')
+def quiz_intermediate_german(request):
+    return render(request , 'quiz_intermediate_german.html')
+def quiz_advanced_german(request):
+    return render(request , 'quiz_advanced_german.html')
+def quiz_beginner_greek(request):
+    return render(request , 'quiz_beginner_greek.html')
+def quiz_intermediate_greek(request):
+    return render(request , 'quiz_intermediate_greek.html')
+def quiz_advanced_greek(request):
+    return render(request , 'quiz_advanced_greek.html')
+def quiz_beginner_gujarati(request):
+    return render(request , 'quiz_beginner_gujarati.html')
+def quiz_intermediate_gujarati(request):
+    return render(request , 'quiz_intermediate_gujarati.html')
+def quiz_advanced_gujarati(request):
+    return render(request , 'quiz_advanced_gujarati.html')
+def quiz_beginner_spanish(request):
+    return render(request , 'quiz_beginner_spanish.html')
+def quiz_intermediate_spanish(request):
+    return render(request , 'quiz_intermediate_spanish.html')
+def quiz_advanced_spanish(request):
+    return render(request , 'quiz_advanced_spanish.html')
 
 def resources_attempt(request):
     username = request.session.get('username')
