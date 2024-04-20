@@ -103,7 +103,13 @@
                     var messageContent = message.message;
                     var timestamp = message.timestamp;
                     var profilePic = message.profile_pic_path;
-                    var temp = "<div class='room-container darker'><img src='" + profilePic + "' style='width: 50px; height: 50px; border-radius: 50%;'><span style='font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; '>" + username + "</span><p style='font-family: Arial, sans-serif; font-size: 16px; color: #1e87de; font-weight: bold;'>" + messageContent + "</p><span class='time-left'>" + timestamp + "</span></div>";
+                    var temp = "<div class='room-container darker'><img src='" + profilePic + "' style='width: 50px; height: 50px; border-radius: 50%;'><span style='font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; '>" + username + "</span>";
+                     // Check if last_login exists before adding it to the HTML
+                     if (message.last_login) {
+                         temp += "<span style='font-family: Arial, sans-serif; font-size: 14px; color: gray;'> Last login: " + message.last_login + "</span>";
+                     }
+                     temp += "<p style='font-family: Arial, sans-serif; font-size: 16px; color: #1e87de; font-weight: bold;'>" + messageContent + "</p><span class='time-left'>" + timestamp + "</span></div>";
+                     
                     $("#display").append(temp);
                 });
             },

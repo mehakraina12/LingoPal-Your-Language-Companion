@@ -17,6 +17,7 @@ from django.contrib.auth import authenticate, login
 import requests
 import base64
 from .models import *
+from datetime import datetime
 
 language_mapping = {
     1: "Arabic",
@@ -116,7 +117,6 @@ def register_attempt(request):
         return render(request,'verify.html', {'otp': otp})
     else:
         return render(request, 'register.html')
-    
 
 def login_attempt(request):
     collection = db['users_details']
@@ -129,6 +129,10 @@ def login_attempt(request):
         reply = collection.find_one({'email': email})
         if reply:
             if check_password(password, reply['password']):
+                # Add timestamp to database
+                login_time = datetime.now()
+                collection.update_one({'email': email}, {'$set': {'last_login': login_time}})
+
                 request.session['username'] = reply['username']
                 return redirect('home_attempt')  # Redirect to home page after successful login
             else:
@@ -140,8 +144,12 @@ def login_attempt(request):
 
 def logout_attempt(request):
     # Clear user data from the session upon logout
-    if 'user_id' in request.session:
-        del request.session['user_id']
+    username = request.session.get('username')
+
+    collection = db['users_details']
+    login_time = datetime.now()
+    collection.update_one({'username': username}, {'$set': {'last_login': login_time}})
+
     if 'username' in request.session:
         del request.session['username']
     return redirect('index')
@@ -248,26 +256,26 @@ def home_attempt(request):
             profile_pic_path = user_data.get('profile_pic_path')
 
             # Find all senders and receivers with status "accepted"
-            # requests_collection = db['users_requests']
-            # sender_requests = requests_collection.find({'receiver_username': username, 'status': 'accepted'})
-            # receiver_requests = requests_collection.find({'sender_username': username, 'status': 'accepted'})
+            requests_collection = db['users_requests']
+            sender_requests = requests_collection.find({'receiver_username': username, 'status': 'accepted'})
+            receiver_requests = requests_collection.find({'sender_username': username, 'status': 'accepted'})
 
-            # # Extract sender and receiver usernames from the requests
-            # sender_usernames = [request['sender_username'] for request in sender_requests]
-            # receiver_usernames = [request['receiver_username'] for request in receiver_requests]
+            # Extract sender and receiver usernames from the requests
+            sender_usernames = [request['sender_username'] for request in sender_requests]
+            receiver_usernames = [request['receiver_username'] for request in receiver_requests]
 
-            # # Fetch details of senders and receivers from users_details
-            # sender_details = list(collection.find({'username': {'$in': sender_usernames}}))  # Convert to list
-            # receiver_details = list(collection.find({'username': {'$in': receiver_usernames}}))  # Convert to list
-            # for sender_detail in sender_details:
-            #     language_to_learn_str = sender_detail.get('language_to_learn', '')
-            #     language_to_learn = int(language_to_learn_str) if language_to_learn_str.isdigit() else None
-            #     sender_detail['language_to_learn'] = language_mapping.get(language_to_learn, 'Unknown')
+            # Fetch details of senders and receivers from users_details
+            sender_details = list(collection.find({'username': {'$in': sender_usernames}}))  # Convert to list
+            receiver_details = list(collection.find({'username': {'$in': receiver_usernames}}))  # Convert to list
+            for sender_detail in sender_details:
+                language_to_learn_str = sender_detail.get('language_to_learn', '')
+                language_to_learn = int(language_to_learn_str) if language_to_learn_str.isdigit() else None
+                sender_detail['language_to_learn'] = language_mapping.get(language_to_learn, 'Unknown')
 
-            # for receiver_detail in receiver_details:
-            #     language_to_learn_str = receiver_detail.get('language_to_learn', '')
-            #     language_to_learn = int(language_to_learn_str) if language_to_learn_str.isdigit() else None
-            #     receiver_detail['language_to_learn'] = language_mapping.get(language_to_learn, 'Unknown')
+            for receiver_detail in receiver_details:
+                language_to_learn_str = receiver_detail.get('language_to_learn', '')
+                language_to_learn = int(language_to_learn_str) if language_to_learn_str.isdigit() else None
+                receiver_detail['language_to_learn'] = language_mapping.get(language_to_learn, 'Unknown')
 
             # # Generate a random group name
             # group_name = generate_random_group_name()
@@ -300,8 +308,8 @@ def home_attempt(request):
                 'username': username,
                 'name': name,
                 'profile_pic_path': profile_pic_path,
-            #     'sender_details': sender_details,  # Sender details queryset
-            #     'receiver_details': receiver_details
+                'sender_details': sender_details,  # Sender details queryset
+                'receiver_details': receiver_details
             }
     else:
         context = {}  # No username in session, empty context
@@ -796,6 +804,7 @@ def playlist_arabic(request):
             }
 
     return render(request , 'playlist_arabic.html',context)
+
 def playlist_bengali(request):
     username = request.session.get('username')
 
@@ -1246,7 +1255,7 @@ def send(request):
         user_data = collection2.find_one({'username': username})
         if user_data:
             profile_pic_path = user_data.get('profile_pic_path')
-            print("Profile Pic Path:", profile_pic_path)
+            
         if room_name and username:
             message_content = request.POST.get('message')
 
@@ -1275,8 +1284,11 @@ def send(request):
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
     
-def getMessages(request,room):  
+def getMessages(request, room):  
     collection = db['users_message']
+    users_details_collection = db['users_details']
+
+    username12 = request.session.get('username')
 
     room_name = request.session.get('room_name')
     result = collection.find_one({'room_name': room_name})  # Use the 'room' parameter directly
@@ -1287,14 +1299,24 @@ def getMessages(request,room):
             if timestamp:
                 formatted_time = timestamp.strftime('%I:%M %p')  # Format as '12:30 AM/PM'
                 message['timestamp'] = formatted_time
+            
             username = message.get('username')
-            user_data = db['users_details'].find_one({'username': username})
-            if user_data:
-                profile_pic_path = user_data.get('profile_pic_path')
-                message['profile_pic_path'] = profile_pic_path
+            if username != username12:
+                user_data = users_details_collection.find_one({'username': username12})
+                if user_data:
+                    last_login = user_data.get('last_login')
+                    if last_login:
+                        formatted_last_login = last_login.strftime('%I:%M %p')  # Format last login time
+                        message['last_login'] = formatted_last_login
+            else:
+                user_data = users_details_collection.find_one({'username': username})
+                if user_data:
+                    profile_pic_path = user_data.get('profile_pic_path')
+                    message['profile_pic_path'] = profile_pic_path
     else:
         messages = []   
     return JsonResponse({"messages": messages})
+
 
 def dashboard(request):
     
