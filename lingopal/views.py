@@ -248,26 +248,26 @@ def home_attempt(request):
             profile_pic_path = user_data.get('profile_pic_path')
 
             # Find all senders and receivers with status "accepted"
-            requests_collection = db['users_requests']
-            sender_requests = requests_collection.find({'receiver_username': username, 'status': 'accepted'})
-            receiver_requests = requests_collection.find({'sender_username': username, 'status': 'accepted'})
+            # requests_collection = db['users_requests']
+            # sender_requests = requests_collection.find({'receiver_username': username, 'status': 'accepted'})
+            # receiver_requests = requests_collection.find({'sender_username': username, 'status': 'accepted'})
 
-            # Extract sender and receiver usernames from the requests
-            sender_usernames = [request['sender_username'] for request in sender_requests]
-            receiver_usernames = [request['receiver_username'] for request in receiver_requests]
+            # # Extract sender and receiver usernames from the requests
+            # sender_usernames = [request['sender_username'] for request in sender_requests]
+            # receiver_usernames = [request['receiver_username'] for request in receiver_requests]
 
-            # Fetch details of senders and receivers from users_details
-            sender_details = list(collection.find({'username': {'$in': sender_usernames}}))  # Convert to list
-            receiver_details = list(collection.find({'username': {'$in': receiver_usernames}}))  # Convert to list
-            for sender_detail in sender_details:
-                language_to_learn_str = sender_detail.get('language_to_learn', '')
-                language_to_learn = int(language_to_learn_str) if language_to_learn_str.isdigit() else None
-                sender_detail['language_to_learn'] = language_mapping.get(language_to_learn, 'Unknown')
+            # # Fetch details of senders and receivers from users_details
+            # sender_details = list(collection.find({'username': {'$in': sender_usernames}}))  # Convert to list
+            # receiver_details = list(collection.find({'username': {'$in': receiver_usernames}}))  # Convert to list
+            # for sender_detail in sender_details:
+            #     language_to_learn_str = sender_detail.get('language_to_learn', '')
+            #     language_to_learn = int(language_to_learn_str) if language_to_learn_str.isdigit() else None
+            #     sender_detail['language_to_learn'] = language_mapping.get(language_to_learn, 'Unknown')
 
-            for receiver_detail in receiver_details:
-                language_to_learn_str = receiver_detail.get('language_to_learn', '')
-                language_to_learn = int(language_to_learn_str) if language_to_learn_str.isdigit() else None
-                receiver_detail['language_to_learn'] = language_mapping.get(language_to_learn, 'Unknown')
+            # for receiver_detail in receiver_details:
+            #     language_to_learn_str = receiver_detail.get('language_to_learn', '')
+            #     language_to_learn = int(language_to_learn_str) if language_to_learn_str.isdigit() else None
+            #     receiver_detail['language_to_learn'] = language_mapping.get(language_to_learn, 'Unknown')
 
             # # Generate a random group name
             # group_name = generate_random_group_name()
@@ -300,8 +300,8 @@ def home_attempt(request):
                 'username': username,
                 'name': name,
                 'profile_pic_path': profile_pic_path,
-                'sender_details': sender_details,  # Sender details queryset
-                'receiver_details': receiver_details
+            #     'sender_details': sender_details,  # Sender details queryset
+            #     'receiver_details': receiver_details
             }
     else:
         context = {}  # No username in session, empty context

@@ -80,8 +80,8 @@
 <section class="form-container">
    <form id="post-form" method="POST" action="checkview">
       {% csrf_token %}
-      <h3>Chatroom</h3>
-      <p>Enter your chatroom recieved on your email <span>*</span></p>
+      <h3>Chatroom</h3> 
+      <p>Enter your chatroom code <span>*</span></p>
       <input type="text" name="room_name" id="room_name" placeholder="Enter room name" required maxlength="50" class="box">
       <input type="submit" value="Enter Room" class="btn">
    </form>
