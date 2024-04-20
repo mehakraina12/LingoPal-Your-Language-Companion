@@ -39,7 +39,7 @@ const questions = [
             { text: "আপনি কেমন আছেন? (apni kemon achen?)", correct: false},
             { text: "নমস্কার (nomoskar)", correct: true},
         ]
-    },
+    }
 
 ];
 

@@ -39,7 +39,7 @@ const questions = [
             { text: "كتابتها (kitābatuhā)", correct: false},
             { text: "كتابه (kitābuhu)", correct: true},
         ]
-    },
+    }
 
 ];
 

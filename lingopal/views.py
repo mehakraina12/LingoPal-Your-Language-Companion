@@ -650,6 +650,66 @@ def quiz_intermediate_spanish(request):
     return render(request , 'quiz_intermediate_spanish.html')
 def quiz_advanced_spanish(request):
     return render(request , 'quiz_advanced_spanish.html')
+def quiz_beginner_hindi(request):
+    return render(request , 'quiz_beginner_hindi.html')
+def quiz_intermediate_hindi(request):
+    return render(request , 'quiz_intermediate_hindi.html')
+def quiz_advanced_hindi(request):
+    return render(request , 'quiz_advanced_hindi.html')
+def quiz_beginner_italian(request):
+    return render(request , 'quiz_beginner_italian.html')
+def quiz_intermediate_italian(request):
+    return render(request , 'quiz_intermediate_italian.html')
+def quiz_advanced_italian(request):
+    return render(request , 'quiz_advanced_italian.html')
+def quiz_beginner_japanese(request):
+    return render(request , 'quiz_beginner_japanese.html')
+def quiz_intermediate_japanese(request):
+    return render(request , 'quiz_intermediate_japanese.html')
+def quiz_advanced_japanese(request):
+    return render(request , 'quiz_advanced_japanese.html')
+def quiz_beginner_korean(request):
+    return render(request , 'quiz_beginner_korean.html')
+def quiz_intermediate_korean(request):
+    return render(request , 'quiz_intermediate_korean.html')
+def quiz_advanced_korean(request):
+    return render(request , 'quiz_advanced_korean.html')
+def quiz_beginner_odia(request):
+    return render(request , 'quiz_beginner_odia.html')
+def quiz_intermediate_odia(request):
+    return render(request , 'quiz_intermediate_odia.html')
+def quiz_advanced_odia(request):
+    return render(request , 'quiz_advanced_odia.html')
+def quiz_beginner_punjabi(request):
+    return render(request , 'quiz_beginner_punjabi.html')
+def quiz_intermediate_punjabi(request):
+    return render(request , 'quiz_intermediate_punjabi.html')
+def quiz_advanced_punjabi(request):
+    return render(request , 'quiz_advanced_punjabi.html')
+def quiz_beginner_russian(request):
+    return render(request , 'quiz_beginner_russian.html')
+def quiz_intermediate_russian(request):
+    return render(request , 'quiz_intermediate_russian.html')
+def quiz_advanced_russian(request):
+    return render(request , 'quiz_advanced_russian.html')
+def quiz_beginner_tamil(request):
+    return render(request , 'quiz_beginner_tamil.html')
+def quiz_intermediate_tamil(request):
+    return render(request , 'quiz_intermediate_tamil.html')
+def quiz_advanced_tamil(request):
+    return render(request , 'quiz_advanced_tamil.html')
+def quiz_beginner_telugu(request):
+    return render(request , 'quiz_beginner_telugu.html')
+def quiz_intermediate_telugu(request):
+    return render(request , 'quiz_intermediate_telugu.html')
+def quiz_advanced_telugu(request):
+    return render(request , 'quiz_advanced_telugu.html')
+def quiz_beginner_urdu(request):
+    return render(request , 'quiz_beginner_urdu.html')
+def quiz_intermediate_urdu(request):
+    return render(request , 'quiz_intermediate_urdu.html')
+def quiz_advanced_urdu(request):
+    return render(request , 'quiz_advanced_urdu.html')
 
 def resources_attempt(request):
     username = request.session.get('username')
@@ -1199,10 +1259,12 @@ def chatroom(request):
     username = request.session.get('username')
     collection = db['users_details']
     user_data = collection.find_one({'username': username})
+    name = user_data.get('name')
     if user_data:
             profile_pic_path = user_data.get('profile_pic_path')
 
             context = {
+                'name': name,
                 'username': username,
                 'profile_pic_path': profile_pic_path  # Add profile pic path to context
             }
@@ -1213,11 +1275,13 @@ def room(request, room):
     collection2 = db['users_details']
     username = request.session.get('username')
     user_data = collection2.find_one({'username': username})
+    name = user_data.get('name')
     room_details = collection.find_one({'name': room})
     if user_data:
             profile_pic_path = user_data.get('profile_pic_path')
 
             context = {
+                'name': name,
                 'username': username,
                 'room': room,
                 'profile_pic_path': profile_pic_path  # Add profile pic path to context

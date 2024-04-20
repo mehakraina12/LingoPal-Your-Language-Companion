@@ -39,7 +39,7 @@ const questions = [
             { text: "নির্বাচন (nirbachon)", correct: false},
             { text: "সরকার (shorokar)", correct: true},
         ]
-    },
+    }
 
 ];
 

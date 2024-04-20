@@ -39,7 +39,7 @@ const questions = [
             { text: "কল্পনা (kolpona)", correct: false},
             { text: "প্রযুক্তি (proyukti)", correct: true},
         ]
-    },
+    }
 
 ];
 

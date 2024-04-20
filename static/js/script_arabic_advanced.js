@@ -39,7 +39,7 @@ const questions = [
             { text: "طَالِبُونَ (ṭālibūna)", correct: false},
             { text: "طُلَّاب (ṭullāb)", correct: true},
         ]
-    },
+    }
 
 ];
 

@@ -17,30 +17,6 @@ const questions = [
         ]
     },
     {
-        question: "How many moon letters are there in the Arabic alphabet?",
-        answers: [
-            { text: "11", correct: false},
-            { text: "14", correct: true},
-            { text: "7", correct: false},
-        ]
-    },
-    {
-        question: "What is the plural form of the word 'kitab' (book - كتاب)?",
-        answers: [
-            { text: "Kutub - كتب", correct: true},
-            { text: "Katabat - كتابات", correct: false},
-            { text: "Kitabin - كتابين", correct: false},
-        ]
-    },
-    {
-        question: "الرجل و الولد means:",
-        answers: [
-            { text: "The father and the son", correct: false},
-            { text: "The man and the girl", correct: false},
-            { text: "The man and the boy", correct: true},
-        ]
-    },
-    {
         question: "عمتها means:",
         answers: [
             { text: "Her cousin", correct: false},
@@ -63,23 +39,7 @@ const questions = [
             { text: "I will not go with him", correct: true},
             { text: "I will not go with her", correct: false},
         ]
-    },
-    {
-        question: "كتابين على كرسي means:",
-        answers: [
-            { text: "Two books on a chair", correct: true},
-            { text: "My dog is on the chair", correct: false},
-            { text: "Two dogs under a chair", correct: false},
-        ]
-    },
-    {
-        question: "How do you say 'big cat' in Arabic?",
-        answers: [
-            { text: "قط جميل", correct: false},
-            { text: "قط كبير", correct: true},
-            { text: "القطة كبيرة", correct: false},
-        ]
-    },
+    }
 
 ];
 
