@@ -236,7 +236,32 @@ def feedback_attempt(request):
                 'profile_pic_path': profile_pic_path  # Add profile pic path to context
             }
 
-    return render(request, 'feedback.html', context)
+            if request.method == 'POST':
+                name = request.POST.get('name')
+                email = request.POST.get('email')
+                phone_number = request.POST.get('number')
+                feedback = request.POST.get('feedback')
+
+                if name and email and phone_number and feedback:
+                    # Insert feedback data into the database
+                    feedback_data = {
+                        'username': username,
+                        'name': name,
+                        'email': email,
+                        'phone_number': phone_number,
+                        'feedback': feedback
+                    }
+                    collection = db['users_feedback']
+                    collection.insert_one(feedback_data)
+
+                    # Optionally, you can redirect the user to a thank you page or render a success message
+                    context['feedback_sent'] = True
+
+            # If not a POST request or missing form data, render the feedback.html template
+            return render(request, 'feedback.html', context)
+
+    # Handle case where username is not found or user_data is None
+    return HttpResponse("User data not found.")
 
 # def generate_random_group_name():
 #     """Generate a random group name."""
@@ -1348,6 +1373,8 @@ def send(request):
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
     
+
+import pytz
 def getMessages(request, room):  
     collection = db['users_message']
     users_details_collection = db['users_details']
@@ -1359,7 +1386,7 @@ def getMessages(request, room):
     if result:
         messages = result.get('messages', [])
         for message in messages:
-            timestamp = message.get('timestamp')
+            timestamp = datetime.now(pytz.timezone('Asia/Kolkata'))
             if timestamp:
                 formatted_time = timestamp.strftime('%I:%M %p')  # Format as '12:30 AM/PM'
                 message['timestamp'] = formatted_time

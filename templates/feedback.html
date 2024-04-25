@@ -40,7 +40,7 @@
          <p class="role">{{username}}</p>
          <a href="{% url 'profile_attempt'%}" class="btn">view profile</a>
          <div class="flex-btn">
-            <a href="{% url 'login_attempt'%}" class="option-btn">login</a>
+            <a href="{% url 'logout_attempt'%}" class="option-btn">logout</a>
             <a href="{% url 'register_attempt'%}" class="option-btn">register</a>
          </div>
       </div>
@@ -71,6 +71,30 @@
    </nav>
 
 </div>
+<style>
+   .number-rating {
+    display: flex;
+}
+
+.number-rating input[type="radio"] {
+    display: none;
+}
+
+.number-rating label {
+    display: inline-block;
+    padding: 5px;
+    font-size: 20px;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.number-rating input[type="radio"]:checked + label {
+    color: #f90; /* Color of selected number */
+}
+
+</style>
+
+
 
 <section class="contact">
 
@@ -80,23 +104,19 @@
          <img src="static/images/contact-img.svg" alt="">
       </div>
 
-      <form action="" method="post">
+      <form method="post" action="{% url 'feedback_attempt' %}">
+         {% csrf_token %}
          <div id="settings" class="settings-container">
             <h3 style="color: white; margin: 5px;">Your Feedback</h3>
          </div>
          <input type="text" placeholder="Enter your name" name="name" required maxlength="50" class="box">
          <input type="email" placeholder="Enter your email" name="email" required maxlength="50" class="box">
          <input type="number" placeholder="Enter your number" name="number" required maxlength="50" class="box">
-         <input type="number" placeholder="Rating" name="number" readonly maxlength="50" class="box" value="Rating">
+         <!-- Rating input -->
+         <input type="text" placeholder="Give your valuable feedback" name="feedback" required maxlength="50" class="box">
 
-         
-         <div class="star-rating">
-             <input type="radio" id="star5" name="rating" value="5"><label for="star5"></label>
-             <input type="radio" id="star4" name="rating" value="4"><label for="star4"></label>
-             <input type="radio" id="star3" name="rating" value="3"><label for="star3"></label>
-             <input type="radio" id="star2" name="rating" value="2"><label for="star2"></label>
-             <input type="radio" id="star1" name="rating" value="1"><label for="star1"></label>
-         </div>
+        
+        
          <input type="submit" value="Submit feedback" class="inline-btn" name="submit">
      </form>
      
@@ -133,6 +153,13 @@
 
 
 <!-- custom js file link  -->
+
+{% if feedback_sent %}
+            <script>
+                // Display an alert message using JavaScript
+                alert('Feedback submitted successfully!');
+            </script>
+        {% endif %}
 <script src="static/js/script1.js"></script>
 
    
