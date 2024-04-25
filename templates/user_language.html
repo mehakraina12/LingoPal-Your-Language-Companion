@@ -41,7 +41,7 @@
       <p class="role">{{username}}</p>
          <a href="{% url 'profile_attempt'%}" class="btn">view profile</a>
          <div class="flex-btn">
-            <a href="{% url 'login_attempt'%}" class="option-btn">login</a>
+            <a href="{% url 'logout_attempt'%}" class="option-btn">logout</a>
             <a href="{% url 'register_attempt'%}" class="option-btn">register</a>
          </div>
       </div>
@@ -87,7 +87,7 @@
       </div>
       <p>Enter languages you are familiar with <span>*</span></p>
       <select name="native_languages" id="native_languages" multiple>
-         <option value="" selected disabled hidden></option>
+         <option value=""></option>
          <option value="1">Arabic</option>
          <option value="2">Bengali</option>
          <option value="3">Chinese (Mandarin)</option>
